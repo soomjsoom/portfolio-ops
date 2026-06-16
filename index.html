@@ -187,6 +187,7 @@
       </div>
       <div class="chart sm"><canvas id="opsUtilChart"></canvas></div>
       <div id="opsUtilDetail" class="ops-mini-detail"></div>
+      <div id="opsUtilStats" class="ops-mini-stats"></div>
 
       <div class="chart-section-head stacked">
         <div><h2>② 이탈·환불 리스크</h2><p class="sub">이탈률 · 환불율 월별 추이</p></div>
@@ -194,6 +195,7 @@
       </div>
       <div class="chart sm"><canvas id="opsChurnChart"></canvas></div>
       <div id="opsChurnDetail" class="ops-mini-detail"></div>
+      <div id="opsChurnStats" class="ops-mini-stats"></div>
 
       <div class="chart-section-head stacked">
         <div><h2>③ 쿠폰할인·ARPU 수익성</h2><p class="sub">정가 추정 대비 쿠폰할인율 · ARPU</p></div>
@@ -201,6 +203,7 @@
       </div>
       <div class="chart sm"><canvas id="opsArpuChart"></canvas></div>
       <div id="opsArpuDetail" class="ops-mini-detail"></div>
+      <div id="opsArpuStats" class="ops-mini-stats"></div>
     </article>
     <article class="panel col-6">
       <div class="chart-section-head">
@@ -251,7 +254,7 @@
     </article>
     <article class="panel col-4">
       <div class="chart-section-head">
-        <div><h2>포지션 맵</h2><p class="sub">매출 집계 월 기준 · 순매출 달성률(X)·이탈률(Y)·총매출(버블)</p></div>
+        <div><h2 id="positionTitle">포지션 맵</h2><p class="sub" id="positionSub">매출 집계 월 기준 · 순매출 달성률(X)·이탈률(Y)·총매출(버블)</p></div>
         <button class="collapse-toggle" data-target="scatterWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="scatterWrap" class="collapsible-content">
@@ -296,6 +299,7 @@
   <section class="panel heatmap-section">
     <h2>매장 성과 히트맵</h2>
     <p class="sub">선택 기간 운영 매장 × 8개 핵심 지표. 초록=우수, 빨강=주의.</p>
+    <button id="hmToggleExtra" class="heatmap-toggle" type="button">▼ 추가 지표</button>
     <div id="heatmapGrid"></div>
   </section>
 

@@ -142,7 +142,7 @@ body{
 @media(max-width:1100px){.equal-grid{grid-template-columns:1fr}}
 .chart.xl canvas{height:300px!important}
 .chart.lg canvas{height:252px!important}
-.chart.sm canvas{height:128px!important}
+.chart.sm canvas{height:160px!important}
 .section-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
 .section-header h2{margin-bottom:0}
 .section-header>.div .sub{margin-bottom:0;margin-top:3px}
@@ -169,6 +169,8 @@ body{
 .hm-cell-top{display:block;font-weight:800}
 .hm-cell-rank{display:block;font-size:9.5px;font-weight:500;opacity:.6;margin-top:1px}
 .hm-scroll-inner{width:max-content;min-width:760px}
+.heatmap-toggle{border:1px solid var(--border);background:var(--surface-soft);color:var(--text-2);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:800;cursor:pointer;margin:0 0 10px}
+.heatmap-toggle:hover{background:var(--accent-soft);color:var(--accent);border-color:rgba(143,66,25,.25)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 9px;border-bottom:2px solid var(--border);text-align:right;white-space:nowrap;background:var(--bg)}
@@ -229,6 +231,7 @@ tbody td:first-child{text-align:left;font-weight:800;font-size:13px}
   .chart.sm canvas{width:100%!important;max-width:100%!important}
   .ops-mini-kv{flex-direction:column}
   .ops-mini-kv span{text-align:left}
+  .ops-mini-stats{grid-template-columns:1fr}
   #heatmapGrid{overflow-x:hidden;padding-bottom:4px}
   #heatmapGrid .hm-scroll-inner{width:100%;min-width:0}
   #heatmapGrid .hm-head-row,
@@ -319,6 +322,16 @@ tbody td:first-child{text-align:left;font-weight:800;font-size:13px}
 .ops-mini-kv{display:flex;justify-content:space-between;gap:12px;background:var(--surface-soft);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 11px;font-size:11.5px;color:var(--muted);line-height:1.45}
 .ops-mini-kv strong{color:var(--text);font-size:12px}
 .ops-mini-kv span{text-align:right}
+.ops-mini-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0 2px}
+.ops-mini-stat{background:#faf7f1;border:1px solid var(--border);border-radius:var(--r-xs);padding:7px 8px}
+.ops-mini-stat span{display:block;font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.ops-mini-stat strong{display:block;font-size:13px;font-weight:900;color:var(--text)}
+.churn-class-box{border-top:1px solid var(--border);margin-top:14px;padding-top:14px}
+.churn-class-box h2{font-size:14px;margin-bottom:4px}
+.churn-class-row{display:grid;grid-template-columns:78px 1fr 52px;gap:8px;align-items:center;font-size:11.5px;color:var(--text-2);margin-top:7px}
+.churn-class-bar{height:8px;background:var(--bg2);border-radius:999px;overflow:hidden}
+.churn-class-fill{height:100%;border-radius:999px}
+.churn-class-val{text-align:right;font-weight:900;color:var(--text)}
 .ac-item-text small{display:block;color:var(--muted);font-size:10.8px;line-height:1.55;margin-top:1px}
 .ac-danger-main{display:flex;flex-direction:column;gap:2px;flex:1}
 .ac-danger-main small{font-size:10.6px;color:var(--muted);line-height:1.35}

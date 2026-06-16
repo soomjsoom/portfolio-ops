@@ -247,6 +247,24 @@
       '<div class="audit-item"><span class="audit-ok">✓</span> 원본 구조 반영, 포트폴리오용 민감 정보 비식별 처리.</div>');
   }
 
+  function renderChurnClassPanel() {
+    var rows = [
+      { label:'가격/프로모션', pct:31, color:'#ae3f4d' },
+      { label:'서비스 품질', pct:26, color:'#b87030' },
+      { label:'이용 빈도 감소', pct:21, color:'#243350' },
+      { label:'경쟁/대체재', pct:13, color:'#1d6450' },
+      { label:'기타', pct:9, color:'#6b7280' },
+    ];
+    setHtml('churnClassPanel',
+      '<div class="churn-class-box"><h2>이탈 원인 분류 분석</h2>' +
+      '<p class="sub">해지 사유 태그를 원본과 동일한 운영 액션 기준으로 재분류한 샘플입니다.</p>' +
+      rows.map(function (r) {
+        return '<div class="churn-class-row"><span>' + r.label + '</span>' +
+          '<div class="churn-class-bar"><div class="churn-class-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>' +
+          '<span class="churn-class-val">' + r.pct + '%</span></div>';
+      }).join('') + '</div>');
+  }
+
   function renderStoreSelect() {
     setHtml('storeSelect', '<option value="all">전체 (7개 매장 합산)</option>' + STORES.map(function(s) {
       return '<option value="' + s.id + '">' + s.name + '</option>';
@@ -350,6 +368,16 @@
       '<div class="pay-item amber"><div class="pay-label">기회 단가</div><div class="pay-val">₩11,089</div><div class="pay-note">Capacity 손실 산정 기준</div></div>');
   }
 
+  function alignOriginalLabels() {
+    setText('bridgeTitle', '포트폴리오 수익 브리지');
+    setText('mixTitle', '포트폴리오 구성 분석');
+    setText('momentumTitle', '운영 KPI 월별 추적');
+    var mrrTitle = el('mrrTrendChart') && el('mrrTrendChart').closest('.panel').querySelector('h2');
+    var subTitle = el('subPipeline') && el('subPipeline').closest('.panel').querySelector('h2');
+    if (mrrTitle) mrrTitle.textContent = 'MRR · 구독 성장 추적';
+    if (subTitle) subTitle.textContent = '구독 현황';
+  }
+
   function renderDetailPanel(store) {
     var s = store || STORES[0];
     setText('detailTitle', s.name + ' 상세');
@@ -388,6 +416,18 @@
     setHtml('opsUtilDetail', '<div class="ops-mini-kv"><strong>운영 가동률 ' + fmtPct(PORTFOLIO.util) + '</strong><span>목표 75%까지 3.2%p, 유휴 Capacity ' + fmtNum(PORTFOLIO.idleCapacity) + '대</span></div>');
     setHtml('opsChurnDetail', '<div class="ops-mini-kv"><strong>이탈률 ' + fmtPct(PORTFOLIO.churn) + ' · 환불율 3.7%</strong><span>해지 방어 캠페인과 환불 원인 분류를 동시에 진행</span></div>');
     setHtml('opsArpuDetail', '<div class="ops-mini-kv"><strong>ARPU 6.1만원 · 쿠폰할인율 5.1%</strong><span>상품 믹스와 할인 정책을 순매출 관점으로 재점검</span></div>');
+    setHtml('opsUtilStats',
+      '<div class="ops-mini-stat"><span>목표</span><strong>75.0%</strong></div>' +
+      '<div class="ops-mini-stat"><span>Gap</span><strong>-3.2%p</strong></div>' +
+      '<div class="ops-mini-stat"><span>유휴</span><strong>' + fmtNum(PORTFOLIO.idleCapacity) + '대</strong></div>');
+    setHtml('opsChurnStats',
+      '<div class="ops-mini-stat"><span>해지</span><strong>' + fmtNum(PORTFOLIO.churnCount) + '건</strong></div>' +
+      '<div class="ops-mini-stat"><span>환불율</span><strong>3.7%</strong></div>' +
+      '<div class="ops-mini-stat"><span>목표</span><strong>10% 이하</strong></div>');
+    setHtml('opsArpuStats',
+      '<div class="ops-mini-stat"><span>ARPU</span><strong>6.1만원</strong></div>' +
+      '<div class="ops-mini-stat"><span>할인율</span><strong>5.1%</strong></div>' +
+      '<div class="ops-mini-stat"><span>순매출</span><strong>' + fmtEok(PORTFOLIO.net) + '</strong></div>');
   }
 
   function renderCharts() {
@@ -518,12 +558,14 @@
     renderKpiGrid();
     renderSignalGrid();
     renderInsights();
+    renderChurnClassPanel();
     renderStoreSelect();
     renderStoreTable();
     renderRankStrip();
     renderHeatmap();
     renderCapacity();
     renderPayment();
+    alignOriginalLabels();
     renderDetailPanel(STORES[0]);
     renderCharts();
     initCollapsible();
