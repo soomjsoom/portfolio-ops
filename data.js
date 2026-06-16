@@ -257,7 +257,7 @@
     ];
     setHtml('churnClassPanel',
       '<div class="churn-class-box"><h2>이탈 원인 분류 분석</h2>' +
-      '<p class="sub">해지 사유 태그를 원본과 동일한 운영 액션 기준으로 재분류한 샘플입니다.</p>' +
+      '<p class="sub">해지 사유 태그를 원본과 동일한 운영 액션 기준으로 재분류한 가상 데이터입니다.</p>' +
       rows.map(function (r) {
         return '<div class="churn-class-row"><span>' + r.label + '</span>' +
           '<div class="churn-class-bar"><div class="churn-class-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>' +
@@ -545,7 +545,7 @@
     });
     var refresh = el('refreshBtn');
     if (refresh) refresh.addEventListener('click', function() {
-      refresh.textContent = '✓ 최신 샘플 반영';
+      refresh.textContent = '✓ 최신 가상 데이터 반영';
       setTimeout(function() { refresh.textContent = '↻ 새로고침'; }, 1100);
     });
   }
