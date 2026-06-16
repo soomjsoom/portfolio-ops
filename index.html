@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="portfolio-banner">
-  📊 포트폴리오 데모 · 모든 수치는 가상 데이터입니다 · 실제 운영 대시보드 구현 결과물
+  📊 포트폴리오 데모 · 원본 운영 구조를 반영한 비식별 샘플 데이터입니다 · 실제 운영 대시보드 구현 결과물
   &nbsp;|&nbsp; <a href="https://github.com/soomjuun/autostay-ops-dashboard" target="_blank">GitHub 원본 보기</a>
 </div>
 <div id="loadingOverlay">
@@ -96,7 +96,7 @@
     <div class="ac-card ac-danger">
       <div class="ac-head">
         <span class="ac-icon">⚠</span>
-        <span class="ac-title">문제 매장 TOP 3</span>
+        <span class="ac-title">우선 점검 매장 3곳</span>
         <span class="ac-badge danger" id="acDangerCount">—</span>
       </div>
       <div class="ac-body" id="acDangerList"></div>
@@ -104,7 +104,7 @@
     <div class="ac-card ac-loss">
       <div class="ac-head">
         <span class="ac-icon">📉</span>
-        <span class="ac-title">손실 추정 금액</span>
+        <span class="ac-title">Capacity 기회금액 상한</span>
       </div>
       <div class="ac-body" id="acLossBody"></div>
     </div>
@@ -115,7 +115,7 @@
       <div class="gauge-badge" id="gbadge-ach"></div>
       <div class="gauge-svg-wrap" id="gsvg-ach"></div>
       <div class="gauge-value" id="gval-ach">—</div>
-      <div class="gauge-meta-label">목표 달성률</div>
+      <div class="gauge-meta-label">순매출 달성률</div>
       <div class="gauge-sub" id="gsub-ach">—</div>
     </article>
     <article class="panel gauge-panel">
@@ -170,7 +170,7 @@
       <div class="chart xl"><canvas id="performanceChart"></canvas></div>
     </article>
     <article class="panel col-4">
-      <h2 id="scoreTitle">운영 레버 스코어</h2>
+      <h2 id="scoreTitle">매장별 운영 스코어</h2>
       <p class="sub" id="scoreSub">6개 지표 가중 종합 점수</p>
       <div class="chart lg"><canvas id="scoreChart"></canvas></div>
     </article>
@@ -180,11 +180,27 @@
       <div class="chart lg"><canvas id="subscriptionChart"></canvas></div>
       <div id="churnClassPanel" style="margin-top:16px"></div>
     </article>
-    <article class="panel col-6">
-      <h2>운영 품질 추적</h2>
-      <p class="sub">가동률·환불율·이탈률·할인비중</p>
-      <div class="chart lg"><canvas id="opsChart"></canvas></div>
-      <div id="opsQualStats" style="margin-top:14px"></div>
+    <article class="panel col-6 ops-diagnostics-panel">
+      <div class="chart-section-head">
+        <div><h2>① 가동률 추이</h2><p class="sub">목표 75% 기준선 · 보정 Capacity 적용</p></div>
+        <button class="collapse-toggle" data-target="opsUtilDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
+      </div>
+      <div class="chart sm"><canvas id="opsUtilChart"></canvas></div>
+      <div id="opsUtilDetail" class="ops-mini-detail"></div>
+
+      <div class="chart-section-head stacked">
+        <div><h2>② 이탈·환불 리스크</h2><p class="sub">이탈률 · 환불율 월별 추이</p></div>
+        <button class="collapse-toggle" data-target="opsChurnDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
+      </div>
+      <div class="chart sm"><canvas id="opsChurnChart"></canvas></div>
+      <div id="opsChurnDetail" class="ops-mini-detail"></div>
+
+      <div class="chart-section-head stacked">
+        <div><h2>③ 쿠폰할인·ARPU 수익성</h2><p class="sub">정가 추정 대비 쿠폰할인율 · ARPU</p></div>
+        <button class="collapse-toggle" data-target="opsArpuDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
+      </div>
+      <div class="chart sm"><canvas id="opsArpuChart"></canvas></div>
+      <div id="opsArpuDetail" class="ops-mini-detail"></div>
     </article>
     <article class="panel col-6">
       <div class="chart-section-head">
@@ -206,7 +222,7 @@
     </article>
     <article class="panel col-4">
       <h2>매장 벤치마크 랭킹</h2>
-      <p class="sub">총매출 순위 + 달성률 비교</p>
+      <p class="sub" id="rankStripSub">총매출 순위 + 순매출 달성률 비교 — 행 클릭으로 선택</p>
       <div id="rankStrip" class="rank-strip"></div>
     </article>
     <article class="panel col-4">
@@ -221,7 +237,7 @@
     </article>
     <article class="panel col-2">
       <h2>구독 파이프라인</h2>
-      <p class="sub">유지·신규·이탈 현황 (최근 월)</p>
+      <p class="sub">월말 유지 구독자와 월중 신규·해지 흐름</p>
       <div id="subPipeline" class="sub-pipeline"></div>
     </article>
     <article class="panel col-4">
@@ -235,7 +251,7 @@
     </article>
     <article class="panel col-4">
       <div class="chart-section-head">
-        <div><h2>포지션 맵</h2><p class="sub">달성률(X)·이탈률(Y)·총매출(버블)</p></div>
+        <div><h2>포지션 맵</h2><p class="sub">매출 집계 월 기준 · 순매출 달성률(X)·이탈률(Y)·총매출(버블)</p></div>
         <button class="collapse-toggle" data-target="scatterWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="scatterWrap" class="collapsible-content">
@@ -257,7 +273,7 @@
     <div class="section-header">
       <div>
         <h2><span class="section-icon amber">⚙</span>가동률 심층 분석</h2>
-        <p class="sub" style="margin-bottom:0">매장별 Capacity · 미가동 대수 · 손실 추정 매출 · 계절 지수</p>
+        <p class="sub" style="margin-bottom:0">매장별 설계·보정 Capacity · 유휴 대수 · 기회금액 상한 · 계절 지수</p>
       </div>
       <span class="section-tag">OPS</span>
     </div>
@@ -267,7 +283,7 @@
   <div class="chart-master-grid" style="margin-bottom:14px">
     <article class="panel col-8">
       <h2>계절 지수 트렌드</h2>
-      <p class="sub">월별 세차 대수 (막대) + 계절 지수 (선)</p>
+      <p class="sub">월별 세차 대수 (막대) + 계절 지수 (선) — 기준선 1.0 = 연평균 45,741대/월</p>
       <div class="chart lg"><canvas id="seasonChart"></canvas></div>
     </article>
     <article class="panel col-4">
@@ -279,7 +295,7 @@
 
   <section class="panel heatmap-section">
     <h2>매장 성과 히트맵</h2>
-    <p class="sub">6개 매장 × 7개 핵심 지표. 초록=우수, 빨강=주의.</p>
+    <p class="sub">선택 기간 운영 매장 × 8개 핵심 지표. 초록=우수, 빨강=주의.</p>
     <div id="heatmapGrid"></div>
   </section>
 
@@ -293,7 +309,7 @@
         <table>
           <thead><tr>
             <th style="text-align:left">매장</th>
-            <th>총매출</th><th>달성률</th><th>순매출</th>
+            <th>총매출</th><th>순매출 달성률</th><th>순매출</th>
             <th>총사용</th><th>가동률 설계(보정)</th><th>환불율</th>
             <th>순증감</th><th>ARPU (원)</th><th>상태</th>
           </tr></thead>

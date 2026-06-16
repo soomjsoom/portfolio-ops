@@ -28,7 +28,7 @@ body{
     linear-gradient(172deg,#faf7f1 0%,var(--bg) 60%,var(--bg2) 100%);
 }
 .wrap{max-width:1600px;margin:0 auto;padding:24px 22px 56px}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px 24px;box-shadow:var(--shadow-sm);transition:box-shadow .2s;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px 24px;box-shadow:var(--shadow-sm);transition:box-shadow .2s;min-width:0;}
 .panel:hover{box-shadow:var(--shadow-md)}
 .panel h2{font-size:15px;font-weight:800;letter-spacing:-.025em;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .panel .sub{font-size:11.5px;color:var(--muted);margin-bottom:14px;line-height:1.55}
@@ -142,6 +142,7 @@ body{
 @media(max-width:1100px){.equal-grid{grid-template-columns:1fr}}
 .chart.xl canvas{height:300px!important}
 .chart.lg canvas{height:252px!important}
+.chart.sm canvas{height:128px!important}
 .section-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
 .section-header h2{margin-bottom:0}
 .section-header>.div .sub{margin-bottom:0;margin-top:3px}
@@ -158,6 +159,7 @@ body{
 .rank-val{font-size:12px;font-weight:700;color:var(--text-2);min-width:68px;text-align:right;flex-shrink:0}
 .rank-ach{font-size:10.5px;font-weight:700;min-width:42px;text-align:right;flex-shrink:0}
 .heatmap-section{margin-bottom:14px;overflow-x:auto}
+#heatmapGrid{max-width:100%;overflow-x:auto}
 .hm-head-row,.hm-data-row{display:grid;gap:4px;margin-bottom:4px;grid-template-columns:96px repeat(8,minmax(82px,1fr))}
 .hm-data-row{cursor:pointer;border-radius:var(--r-sm);transition:.12s}
 .hm-data-row:hover{box-shadow:0 0 0 2px var(--accent)}
@@ -166,6 +168,7 @@ body{
 .hm-cell{padding:9px 5px;border-radius:var(--r-xs);text-align:center;font-size:11.5px;font-weight:700;line-height:1.25;transition:filter .15s}
 .hm-cell-top{display:block;font-weight:800}
 .hm-cell-rank{display:block;font-size:9.5px;font-weight:500;opacity:.6;margin-top:1px}
+.hm-scroll-inner{width:max-content;min-width:760px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 9px;border-bottom:2px solid var(--border);text-align:right;white-space:nowrap;background:var(--bg)}
@@ -208,7 +211,33 @@ tbody td:first-child{text-align:left;font-weight:800;font-size:13px}
 .chart-master-grid .chart.xl canvas{height:270px!important}
 .chart-master-grid .chart.lg canvas{height:240px!important}
 @media(max-width:1100px){.chart-master-grid{grid-template-columns:repeat(2,1fr)}.chart-master-grid [class*="col-"]{grid-column:span 1}.chart-master-grid .col-8,.chart-master-grid .col-6{grid-column:span 2}}
-@media(max-width:640px){.chart-master-grid{grid-template-columns:1fr}.chart-master-grid [class*="col-"]{grid-column:span 1}}
+@media(max-width:640px){
+  body{overflow-x:hidden}
+  .chart-master-grid{grid-template-columns:minmax(0,1fr)}
+  .chart-master-grid [class*="col-"],
+  .chart-master-grid .col-8,
+  .chart-master-grid .col-7,
+  .chart-master-grid .col-6,
+  .chart-master-grid .col-5,
+  .chart-master-grid .col-4,
+  .chart-master-grid .col-3,
+  .chart-master-grid .col-2{grid-column:span 1!important;min-width:0}
+  .section-header,
+  .chart-section-head{flex-wrap:wrap}
+  .chart.xl canvas,
+  .chart.lg canvas,
+  .chart.sm canvas{width:100%!important;max-width:100%!important}
+  .ops-mini-kv{flex-direction:column}
+  .ops-mini-kv span{text-align:left}
+  #heatmapGrid{overflow-x:hidden;padding-bottom:4px}
+  #heatmapGrid .hm-scroll-inner{width:100%;min-width:0}
+  #heatmapGrid .hm-head-row,
+  #heatmapGrid .hm-data-row{min-width:0;grid-template-columns:54px repeat(8,minmax(24px,1fr));gap:3px}
+  #heatmapGrid .hm-head-cell{font-size:8px;padding:4px 1px}
+  #heatmapGrid .hm-label-cell{font-size:10.5px;padding:0 2px}
+  #heatmapGrid .hm-cell{font-size:9px;padding:7px 1px}
+  #heatmapGrid .hm-cell-rank{display:none}
+}
 .sub-pipeline{display:flex;flex-direction:column;gap:10px;padding-top:4px}
 .pipe-row{display:flex;flex-direction:column;gap:3px}
 .pipe-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.03em}
@@ -284,6 +313,15 @@ tbody td:first-child{text-align:left;font-weight:800;font-size:13px}
 .chart-section-head>div{flex:1}
 .chart-section-head h2{margin:0}
 .chart-section-head .sub{margin:2px 0 0}
+.chart-section-head.stacked{border-top:1px solid var(--border);margin-top:18px;padding-top:18px}
+.ops-diagnostics-panel .sub{margin-bottom:8px}
+.ops-mini-detail{margin:8px 0 2px}
+.ops-mini-kv{display:flex;justify-content:space-between;gap:12px;background:var(--surface-soft);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 11px;font-size:11.5px;color:var(--muted);line-height:1.45}
+.ops-mini-kv strong{color:var(--text);font-size:12px}
+.ops-mini-kv span{text-align:right}
+.ac-item-text small{display:block;color:var(--muted);font-size:10.8px;line-height:1.55;margin-top:1px}
+.ac-danger-main{display:flex;flex-direction:column;gap:2px;flex:1}
+.ac-danger-main small{font-size:10.6px;color:var(--muted);line-height:1.35}
 .ach-cell-good{background:var(--green-soft);color:var(--green);font-weight:800;padding:3px 7px;border-radius:6px;display:inline-block}
 .ach-cell-warn{background:var(--amber-soft);color:var(--amber);font-weight:800;padding:3px 7px;border-radius:6px;display:inline-block}
 .ach-cell-bad{background:var(--rose-soft);color:var(--rose);font-weight:900;padding:3px 7px;border-radius:6px;display:inline-block}
