@@ -29,25 +29,25 @@
   };
 
   var STORES = [
-    { id:'hanam', name:'하남', score:88, grade:'A', status:'우수',
+    { id:'store-a', name:'A지점', score:88, grade:'A', status:'우수',
       util:89.4, churn:8.2, rev:8.1, ach:130.6, netRev:7.9, usage:55420, refund:2.2,
       netChange:420, arpu:68200, mrr:1.12, idle:10400, opp:1.1, trend:[74,82,94,106,122,131] },
-    { id:'gwangmyeong', name:'광명', score:76, grade:'B', status:'관리',
+    { id:'store-b', name:'B지점', score:76, grade:'B', status:'관리',
       util:74.0, churn:10.8, rev:6.2, ach:99.4, netRev:5.9, usage:42180, refund:3.5,
       netChange:210, arpu:62800, mrr:0.86, idle:23400, opp:2.6, trend:[88,91,96,98,99,99] },
-    { id:'ilsan', name:'일산', score:72, grade:'B', status:'관리',
+    { id:'store-c', name:'C지점', score:72, grade:'B', status:'관리',
       util:68.1, churn:10.2, rev:4.8, ach:92.4, netRev:4.5, usage:35260, refund:3.0,
       netChange:168, arpu:60400, mrr:0.71, idle:31680, opp:1.9, trend:[82,84,88,90,91,92] },
-    { id:'seongsu', name:'성수', score:62, grade:'C', status:'주의',
+    { id:'store-d', name:'D지점', score:62, grade:'C', status:'주의',
       util:62.5, churn:12.8, rev:3.9, ach:78.9, netRev:3.5, usage:30340, refund:4.9,
       netChange:54, arpu:59200, mrr:0.61, idle:38600, opp:1.5, trend:[72,76,79,77,79,79] },
-    { id:'goyang', name:'고양', score:56, grade:'D', status:'위험',
+    { id:'store-e', name:'E지점', score:56, grade:'D', status:'위험',
       util:48.4, churn:12.1, rev:3.0, ach:72.8, netRev:2.6, usage:24200, refund:5.4,
       netChange:-38, arpu:55100, mrr:0.48, idle:50850, opp:2.0, trend:[78,73,70,68,62,73] },
-    { id:'jayuro', name:'자유로', score:54, grade:'D', status:'위험',
+    { id:'store-f', name:'F지점', score:54, grade:'D', status:'위험',
       util:57.4, churn:19.1, rev:2.8, ach:62.8, netRev:2.3, usage:27810, refund:6.8,
       netChange:-146, arpu:52600, mrr:0.43, idle:57400, opp:2.6, trend:[68,66,65,64,63,63] },
-    { id:'anseong', name:'안성', score:54, grade:'D', status:'위험',
+    { id:'store-g', name:'G지점', score:54, grade:'D', status:'위험',
       util:7.0, churn:7.6, rev:1.3, ach:64.6, netRev:1.2, usage:6248, refund:2.8,
       netChange:212, arpu:48700, mrr:0.32, idle:67600, opp:2.6, trend:[0,0,0,0,51,65] },
   ];
@@ -175,9 +175,9 @@
       actionItem('Capacity 기회금액 상한 12.9억 — 수요 검증 후 가동률 제고 계획 수립', '사업운영팀', '2026-06-23', '가동률 65% 이상', '14일 내 주간 가동률 5%p 이상 반등 수치 확인'));
 
     var danger = [
-      { rank:1, name:'자유로', score:54, issue:'순매출 달성률 62.8% · 이탈 19.1% · 가동 57.4%', cause:'이탈 집중관리 + 목표 큰 폭 미달', action:'CS 이슈 긴급 점검 · 해지 사유 분류', dri:'BizOps 리텐션 담당' },
-      { rank:2, name:'안성', score:54, issue:'순매출 달성률 64.6% · 가동 7.0%', cause:'목표 큰 폭 미달 + 저가동', action:'가격·프로모션 긴급 검토', dri:'BizOps 영업 담당' },
-      { rank:3, name:'고양', score:56, issue:'이탈 12.1% · 가동 48.4%', cause:'이탈 관리필요 + 저가동', action:'리텐션 캠페인 집행 · 해지 사유 수집', dri:'BizOps 리텐션 담당' },
+      { rank:1, name:'F지점', score:54, issue:'순매출 달성률 62.8% · 이탈 19.1% · 가동 57.4%', cause:'이탈 집중관리 + 목표 큰 폭 미달', action:'CS 이슈 긴급 점검 · 해지 사유 분류', dri:'BizOps 리텐션 담당' },
+      { rank:2, name:'G지점', score:54, issue:'순매출 달성률 64.6% · 가동 7.0%', cause:'목표 큰 폭 미달 + 저가동', action:'가격·프로모션 긴급 검토', dri:'BizOps 영업 담당' },
+      { rank:3, name:'E지점', score:56, issue:'이탈 12.1% · 가동 48.4%', cause:'이탈 관리필요 + 저가동', action:'리텐션 캠페인 집행 · 해지 사유 수집', dri:'BizOps 리텐션 담당' },
     ];
     setText('acDangerCount', '3');
     setHtml('acDangerList', danger.map(function(s) {
@@ -237,10 +237,10 @@
   }
 
   function renderInsights() {
-    setText('headline', '[1월~6월 기준] 7개 직영점 합산: 순매출 29.0억 / 총매출 30.1억 (순매출 목표 근접 98.8%) · 운영 가동률 71.8% · 이탈률 14.0% · MRR 5.3억 성장 중. 합산 최고 매출: 하남 8.1억.');
+    setText('headline', '[1월~6월 기준] 7개 직영점 합산: 순매출 29.0억 / 총매출 30.1억 (순매출 목표 근접 98.8%) · 운영 가동률 71.8% · 이탈률 14.0% · MRR 5.3억 성장 중. 합산 최고 매출: A지점 8.1억.');
     setHtml('riskList',
       '<div class="risk-item"><div class="risk-dot critical"></div><span><strong>이탈률 심각 (14.0%)</strong><br>MRR 직접 손실 · 구독 기반 잠식 위험<br>담당: 사업운영팀 · 마케팅팀<br>→ 해지 방어 캠페인 즉시 실행 + 해지 원인 인터뷰 착수</span></div>' +
-      '<div class="risk-item"><div class="risk-dot warning"></div><span><strong>자유로·안성·고양 우선 점검</strong><br>목표 미달, 저가동, 이탈 리스크가 중첩된 매장입니다.</span></div>');
+      '<div class="risk-item"><div class="risk-dot warning"></div><span><strong>F지점·G지점·E지점 우선 점검</strong><br>목표 미달, 저가동, 이탈 리스크가 중첩된 매장입니다.</span></div>');
     setHtml('auditList',
       '<div class="audit-item"><span class="audit-ok">✓</span> 모든 핵심 수치가 정상 범위로 렌더링되었습니다.</div>' +
       '<div class="audit-item"><span class="audit-ok">✓</span> 매출·구독·가동률·환불율·이탈률 지표가 동일 기간 기준으로 정렬되었습니다.</div>' +
@@ -446,7 +446,7 @@
       type:'radar',
       data:{ labels:['순매출 달성','가동률','이탈관리','환불관리','MRR 성장','순증감'], datasets:[
         { label:'전체 평균', data:[99,72,60,82,86,68], borderColor:'#243350', backgroundColor:'#24335022', pointRadius:3 },
-        { label:'하남', data:[100,89,82,92,91,80], borderColor:'#1d6450', backgroundColor:'#1d645020', pointRadius:2 },
+        { label:'A지점', data:[100,89,82,92,91,80], borderColor:'#1d6450', backgroundColor:'#1d645020', pointRadius:2 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ r:{ ticks:{ color:'#888', backdropColor:'transparent' }, grid:{ color:'#e0d8cc' }, pointLabels:{ color:'#555', font:{ size:10 } } } } }
     });
