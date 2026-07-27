@@ -5,51 +5,54 @@
 (function () {
   'use strict';
 
-  var MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월'];
+  var MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월', '7월'];
   var PALETTE = ['#243350', '#8f4219', '#1d6450', '#b87030', '#ae3f4d', '#6b7280', '#1c7070'];
   var PORTFOLIO = {
-    gross: 30.1,
-    grossAch: 102.9,
-    net: 29.0,
-    target: 29.3,
-    netAch: 98.8,
-    mrr: 5.3,
-    mrrYoY: 15.7,
-    util: 71.8,
-    usage: 291458,
-    churn: 14.0,
-    churnCount: 7275,
-    retained: 8674,
-    newSubs: 8155,
-    netChange: 880,
-    capacityOpportunity: 12.9,
-    idleCapacity: 116177,
-    avgUnitPrice: 11089,
-    score: 67
+    gross: 35.2,
+    grossAch: 96.8,
+    net: 33.3,
+    target: 35.2,
+    netAch: 94.7,
+    mrr: 4.8,
+    mrrYoY: 12.6,
+    util: 64.8,
+    usage: 328420,
+    churn: 13.8,
+    churnCount: 8064,
+    retained: 7740,
+    newSubs: 8216,
+    netChange: 152,
+    refund: 4.0,
+    couponRate: 1.0,
+    couponDiscount: 0.35,
+    capacityOpportunity: 18.4,
+    idleCapacity: 166850,
+    avgUnitPrice: 11030,
+    score: 62
   };
 
   var STORES = [
-    { id:'store-a', name:'A지점', score:88, grade:'A', status:'우수',
-      util:89.4, churn:8.2, rev:8.1, ach:130.6, netRev:7.9, usage:55420, refund:2.2,
-      netChange:420, arpu:68200, mrr:1.12, idle:10400, opp:1.1, trend:[74,82,94,106,122,131] },
-    { id:'store-b', name:'B지점', score:76, grade:'B', status:'관리',
-      util:74.0, churn:10.8, rev:6.2, ach:99.4, netRev:5.9, usage:42180, refund:3.5,
-      netChange:210, arpu:62800, mrr:0.86, idle:23400, opp:2.6, trend:[88,91,96,98,99,99] },
-    { id:'store-c', name:'C지점', score:72, grade:'B', status:'관리',
-      util:68.1, churn:10.2, rev:4.8, ach:92.4, netRev:4.5, usage:35260, refund:3.0,
-      netChange:168, arpu:60400, mrr:0.71, idle:31680, opp:1.9, trend:[82,84,88,90,91,92] },
+    { id:'store-a', name:'A지점', score:73, grade:'B', status:'관리',
+      util:79.6, churn:12.4, rev:9.2, ach:126.4, netRev:8.8, usage:74220, refund:3.0,
+      netChange:42, arpu:42900, mrr:0.86, idle:22400, opp:2.2, trend:[103,111,118,124,126,128,126] },
+    { id:'store-b', name:'B지점', score:69, grade:'B', status:'관리',
+      util:69.2, churn:13.2, rev:8.6, ach:98.7, netRev:8.2, usage:66510, refund:3.5,
+      netChange:76, arpu:43100, mrr:0.78, idle:30500, opp:3.3, trend:[92,94,96,98,101,99,99] },
+    { id:'store-c', name:'C지점', score:65, grade:'C', status:'주의',
+      util:100.8, churn:14.4, rev:4.9, ach:93.5, netRev:4.7, usage:50880, refund:4.2,
+      netChange:-118, arpu:42500, mrr:0.72, idle:5200, opp:0.2, trend:[84,88,91,93,94,95,94] },
     { id:'store-d', name:'D지점', score:62, grade:'C', status:'주의',
-      util:62.5, churn:12.8, rev:3.9, ach:78.9, netRev:3.5, usage:30340, refund:4.9,
-      netChange:54, arpu:59200, mrr:0.61, idle:38600, opp:1.5, trend:[72,76,79,77,79,79] },
-    { id:'store-e', name:'E지점', score:56, grade:'D', status:'위험',
-      util:48.4, churn:12.1, rev:3.0, ach:72.8, netRev:2.6, usage:24200, refund:5.4,
-      netChange:-38, arpu:55100, mrr:0.48, idle:50850, opp:2.0, trend:[78,73,70,68,62,73] },
-    { id:'store-f', name:'F지점', score:54, grade:'D', status:'위험',
-      util:57.4, churn:19.1, rev:2.8, ach:62.8, netRev:2.3, usage:27810, refund:6.8,
-      netChange:-146, arpu:52600, mrr:0.43, idle:57400, opp:2.6, trend:[68,66,65,64,63,63] },
-    { id:'store-g', name:'G지점', score:54, grade:'D', status:'위험',
-      util:7.0, churn:7.6, rev:1.3, ach:64.6, netRev:1.2, usage:6248, refund:2.8,
-      netChange:212, arpu:48700, mrr:0.32, idle:67600, opp:2.6, trend:[0,0,0,0,51,65] },
+      util:61.1, churn:13.7, rev:4.6, ach:96.2, netRev:4.4, usage:45720, refund:3.3,
+      netChange:-82, arpu:42100, mrr:0.66, idle:28600, opp:2.8, trend:[86,89,92,94,95,97,96] },
+    { id:'store-e', name:'E지점', score:53, grade:'D', status:'위험',
+      util:54.2, churn:18.5, rev:3.9, ach:58.6, netRev:3.5, usage:40930, refund:4.1,
+      netChange:18, arpu:41400, mrr:0.58, idle:36500, opp:3.0, trend:[67,64,61,60,58,59,59] },
+    { id:'store-f', name:'F지점', score:57, grade:'D', status:'주의',
+      util:46.8, churn:11.7, rev:2.7, ach:83.9, netRev:2.5, usage:31580, refund:6.4,
+      netChange:31, arpu:41800, mrr:0.51, idle:22050, opp:2.3, trend:[74,78,80,82,83,84,84] },
+    { id:'store-g', name:'G지점', score:43, grade:'D', status:'위험',
+      util:8.4, churn:29.6, rev:1.3, ach:61.5, netRev:1.2, usage:18600, refund:7.5,
+      netChange:185, arpu:39700, mrr:0.41, idle:41600, opp:4.6, trend:[0,0,22,46,56,62,62] },
   ];
 
   function el(id) { return document.getElementById(id); }
@@ -103,14 +106,14 @@
 
   function renderHero() {
     setText('focusLabel', '전체 합산');
-    setText('focusSub', '6개월 합산 · 운영 7개 매장');
-    setText('updatedAt', '🕐 조회 오후 01:49 · 방금 전');
-    setText('auditBadge', '✓ 정합성 정상');
+    setText('focusSub', '7개월 합산 · 최신월 MTD · 운영 7개 매장');
+    setText('updatedAt', '🕐 조회 오전 11:20 · 방금 전');
+    setText('auditBadge', '● 시트 연결 정상');
     setText('scoreBadgeVal', PORTFOLIO.score);
     setText('scoreBadgeRank', '/ 100점');
 
     var items = [
-      { label:'총매출', value:fmtEok(PORTFOLIO.gross), delta:'총매출 달성 ' + fmtPct(PORTFOLIO.grossAch) },
+      { label:'실결제매출', value:fmtEok(PORTFOLIO.gross), delta:'실결제매출 달성 ' + fmtPct(PORTFOLIO.grossAch) },
       { label:'MRR', value:fmtEok(PORTFOLIO.mrr), delta:'MRR YoY +' + fmtPct(PORTFOLIO.mrrYoY) },
       { label:'가동률', value:fmtPct(PORTFOLIO.util), delta:fmtNum(PORTFOLIO.usage) + '대 사용' },
       { label:'이탈률', value:fmtPct(PORTFOLIO.churn), delta:'해지 ' + fmtNum(PORTFOLIO.churnCount) + '건' },
@@ -132,9 +135,10 @@
     if (dot) dot.style.background = '#ae3f4d';
     if (txt) txt.textContent = '위험 지표 있음';
     setHtml('alertStrip',
-      '<span class="alert-item alert-warn">⚠ 이탈률 14.0% — 긴급 해지 방어 캠페인 검토</span>' +
-      '<span class="alert-item alert-info">ℹ 전체 7개 매장 합산 · 1월~6월</span>' +
-      '<span class="alert-item alert-info">ℹ 원천 매출 6.14 · 2일 지연</span>');
+      '<span class="alert-item alert-warn">⚠ 이탈률 13.8% — 긴급 해지 방어 캠페인 검토</span>' +
+      '<span class="alert-item alert-warn">⚑ G지점: 환불율 7.5% · 이탈률 29.6% — 운영 원인 집중 점검</span>' +
+      '<span class="alert-item alert-info">ℹ 전체 7개 매장 합산 · 1월~7월 MTD</span>' +
+      '<span class="alert-item alert-info">ℹ 원천 매출 7.26 · 전일까지 반영</span>');
     var alertEl = el('alertStrip');
     if (alertEl) alertEl.style.display = 'flex';
   }
@@ -145,16 +149,16 @@
     drawGauge('gsvg-churn', 1 - (PORTFOLIO.churn / 100), '#ae3f4d');
     drawGauge('gsvg-mrr', 0.79, '#8f4219');
     setText('gval-ach', fmtPct(PORTFOLIO.netAch));
-    setText('gsub-ach', '목표 ' + fmtEok(PORTFOLIO.target) + ' · 순매출 ' + fmtEok(PORTFOLIO.net) + ' ▲4.3%p MoM');
+    setText('gsub-ach', '목표 ' + fmtEok(PORTFOLIO.target) + ' · 순매출 ' + fmtEok(PORTFOLIO.net) + ' · 7개월 MTD');
     setText('gbadge-ach', '목표 근접');
     setText('gval-util', fmtPct(PORTFOLIO.util));
     setText('gsub-util', '총사용 ' + fmtNum(PORTFOLIO.usage) + '대 · 유휴 Capacity ' + fmtNum(PORTFOLIO.idleCapacity) + '대');
     setText('gbadge-util', '▲4.9%p');
     setText('gval-churn', fmtPct(PORTFOLIO.churn));
-    setText('gsub-churn', '이탈 ' + fmtNum(PORTFOLIO.churnCount) + '명 · 유지 ' + fmtNum(PORTFOLIO.retained) + '명');
+    setText('gsub-churn', '기간 이탈 ' + fmtNum(PORTFOLIO.churnCount) + '명 · 월말 유지 ' + fmtNum(PORTFOLIO.retained) + '명');
     setText('gbadge-churn', '위험');
     setText('gval-mrr', '+' + fmtPct(PORTFOLIO.mrrYoY));
-    setText('gsub-mrr', 'MRR ' + fmtEok(PORTFOLIO.mrr) + ' · ARPU 6.1만원');
+    setText('gsub-mrr', 'MRR ' + fmtEok(PORTFOLIO.mrr) + ' · ARPU 4.2만원');
     setText('gbadge-mrr', '고성장');
   }
 
@@ -171,13 +175,13 @@
   function renderActionCenter() {
     setText('acActionCount', '2');
     setHtml('acActionList',
-      actionItem('이탈률 14.0% — 리텐션 캠페인 긴급 집행', '사업운영팀', '2026-06-23', '이탈률 10% 이하', '7일 내 이탈률 1%p 이상 개선 또는 전환율 8% 이상') +
-      actionItem('Capacity 기회금액 상한 12.9억 — 수요 검증 후 가동률 제고 계획 수립', '사업운영팀', '2026-06-23', '가동률 65% 이상', '14일 내 주간 가동률 5%p 이상 반등 수치 확인'));
+      actionItem('이탈률 13.8% — 리텐션 캠페인 긴급 집행', '사업운영팀', '2026-08-03', '이탈률 10% 이하', '7일 내 이탈률 1%p 이상 개선 또는 리텐션 캠페인 전환율 8% 이상') +
+      actionItem('Capacity 기회금액 상한 18.4억 — 수요 검증 후 가동률 제고 계획 수립', '사업운영팀', '2026-08-03', '가동률 65% 이상 달성으로 유휴 Capacity 50% 이상 감소', '14일 내 주간 가동률 5%p 이상 반등 수치 확인'));
 
     var danger = [
-      { rank:1, name:'F지점', score:54, issue:'순매출 달성률 62.8% · 이탈 19.1% · 가동 57.4%', cause:'이탈 집중관리 + 목표 큰 폭 미달', action:'CS 이슈 긴급 점검 · 해지 사유 분류', dri:'BizOps 리텐션 담당' },
-      { rank:2, name:'G지점', score:54, issue:'순매출 달성률 64.6% · 가동 7.0%', cause:'목표 큰 폭 미달 + 저가동', action:'가격·프로모션 긴급 검토', dri:'BizOps 영업 담당' },
-      { rank:3, name:'E지점', score:56, issue:'이탈 12.1% · 가동 48.4%', cause:'이탈 관리필요 + 저가동', action:'리텐션 캠페인 집행 · 해지 사유 수집', dri:'BizOps 리텐션 담당' },
+      { rank:1, name:'G지점', score:43, issue:'순매출 달성률 61.5% · 이탈 29.6% · 가동 8.4%', cause:'이탈 집중관리 + 목표 큰 폭 미달', action:'CS 이슈 긴급 점검 · 해지 사유 분류', dri:'BizOps 리텐션 담당' },
+      { rank:2, name:'E지점', score:53, issue:'순매출 달성률 58.6% · 이탈 18.5% · 가동 54.2%', cause:'이탈 집중관리 + 목표 큰 폭 미달', action:'가격·프로모션 긴급 검토', dri:'BizOps 영업 담당' },
+      { rank:3, name:'F지점', score:57, issue:'이탈 11.7% · 가동 46.8%', cause:'이탈 관리필요 + 저가동', action:'리텐션 캠페인 집행 · 해지 사유 수집', dri:'BizOps 리텐션 담당' },
     ];
     setText('acDangerCount', '3');
     setHtml('acDangerList', danger.map(function(s) {
@@ -191,23 +195,23 @@
     setHtml('acLossBody',
       '<div class="ac-loss-total">' + fmtEok(PORTFOLIO.capacityOpportunity) + '</div>' +
       '<div class="ac-loss-sub">운영 매장 합산 · 유휴 Capacity ' + fmtNum(PORTFOLIO.idleCapacity) + '대 · 가중 평균 단가 ' + fmtNum(PORTFOLIO.avgUnitPrice) + '원/대</div>' +
-      '<div class="ac-loss-row"><span>확정월 누적</span><strong>10.8억</strong></div>' +
-      '<div class="ac-loss-row"><span>MTD (14일)</span><strong>2.1억</strong></div>' +
-      '<div class="ac-loss-row"><span>월말 예상</span><strong>4.4억</strong></div>' +
+      '<div class="ac-loss-row"><span>확정월 누적</span><strong>13.9억</strong></div>' +
+      '<div class="ac-loss-row"><span>MTD (26일)</span><strong>4.5억</strong></div>' +
+      '<div class="ac-loss-row"><span>월말 예상</span><strong>5.3억</strong></div>' +
       '<div class="ac-loss-breakdown">' + STORES.slice().sort(function(a,b){ return b.opp - a.opp; }).map(function(s) {
         return '<div><div class="ac-loss-row"><span>' + s.name + '</span><strong>' + fmtEok(s.opp) + '</strong></div>' +
-          '<div class="ac-loss-bar-wrap"><div class="ac-loss-bar" style="width:' + Math.min(100, s.opp / 2.6 * 100) + '%"></div></div></div>';
+          '<div class="ac-loss-bar-wrap"><div class="ac-loss-bar" style="width:' + Math.min(100, s.opp / 4.6 * 100) + '%"></div></div></div>';
       }).join('') + '</div>');
   }
 
   function renderKpiGrid() {
     var kpis = [
-      { label:'총매출', value:fmtEok(PORTFOLIO.gross), delta:'달성률 ' + fmtPct(PORTFOLIO.grossAch), sub:'전체 7개 매장', trend:[3.7,4.5,5.0,5.2,6.0,5.7] },
-      { label:'순매출', value:fmtEok(PORTFOLIO.net), delta:'목표 근접 ' + fmtPct(PORTFOLIO.netAch), sub:'목표 ' + fmtEok(PORTFOLIO.target), trend:[3.5,4.3,4.8,5.0,5.8,5.6] },
-      { label:'MRR', value:fmtEok(PORTFOLIO.mrr), delta:'YoY +' + fmtPct(PORTFOLIO.mrrYoY), sub:'월 반복 매출', trend:[4.58,4.71,4.83,4.96,5.18,5.31] },
-      { label:'가동률', value:fmtPct(PORTFOLIO.util), delta:'▲4.9%p MoM', sub:'목표 75%', trend:[61,65,68,70,72,72] },
-      { label:'이탈률', value:fmtPct(PORTFOLIO.churn), delta:'즉각 대응', sub:'목표 10% 이하', trend:[13.1,12.7,13.8,14.4,13.6,14.0] },
-      { label:'순증감', value:signed(PORTFOLIO.netChange), delta:'신규 ' + fmtNum(PORTFOLIO.newSubs), sub:'해지 ' + fmtNum(PORTFOLIO.churnCount), trend:[80,132,188,150,210,120] },
+      { label:'실결제매출', value:fmtEok(PORTFOLIO.gross), delta:'달성률 ' + fmtPct(PORTFOLIO.grossAch), sub:'전체 7개 매장 · 7개월', trend:[4.1,4.5,4.9,5.2,5.8,5.9,4.8] },
+      { label:'순매출', value:fmtEok(PORTFOLIO.net), delta:'목표 근접 ' + fmtPct(PORTFOLIO.netAch), sub:'목표 ' + fmtEok(PORTFOLIO.target), trend:[3.9,4.3,4.6,4.9,5.4,5.6,4.6] },
+      { label:'MRR', value:fmtEok(PORTFOLIO.mrr), delta:'YoY +' + fmtPct(PORTFOLIO.mrrYoY), sub:'월 반복 매출', trend:[4.21,4.32,4.41,4.50,4.61,4.73,4.82] },
+      { label:'가동률', value:fmtPct(PORTFOLIO.util), delta:'목표 75%', sub:'MTD 가동률 40.8%', trend:[73,74,69,77,66,55,41] },
+      { label:'이탈률', value:fmtPct(PORTFOLIO.churn), delta:'즉각 대응', sub:'목표 10% 이하', trend:[16.4,16.8,18.9,12.2,11.3,11.6,9.6] },
+      { label:'순증감', value:signed(PORTFOLIO.netChange), delta:'신규 ' + fmtNum(PORTFOLIO.newSubs), sub:'해지 ' + fmtNum(PORTFOLIO.churnCount), trend:[-92,-64,-118,94,138,346,-152] },
     ];
     setHtml('kpiGrid', kpis.map(function(k, i) {
       var max = Math.max.apply(null, k.trend);
@@ -226,10 +230,10 @@
 
   function renderSignalGrid() {
     var signals = [
-      { label:'목표 근접', value:'순매출 달성률 98.8%', change:'3399.6만원 미달', level:'warn' },
-      { label:'이탈 위험', value:'이탈률 14.0%', change:'즉각 대응', level:'bad' },
-      { label:'가동 양호', value:'운영 가동률 71.8%', change:'목표 75%까지 3.2%p', level:'ok' },
-      { label:'MRR 고성장', value:'YoY +15.7%', change:'5.3억', level:'ok' },
+      { label:'목표 근접', value:'순매출 달성률 94.7%', change:'1.9억 미달', level:'warn' },
+      { label:'이탈 위험', value:'이탈률 13.8%', change:'즉각 대응', level:'bad' },
+      { label:'가동 관리', value:'운영 가동률 64.8%', change:'목표 75%까지 10.2%p', level:'warn' },
+      { label:'MRR 성장', value:'YoY +12.6%', change:'4.8억', level:'ok' },
     ];
     setHtml('signalGrid', signals.map(function(s) {
       return '<div class="signal ' + s.level + '"><div class="signal-dot"></div><div class="signal-text"><strong>' + s.label + '</strong><span>' + s.value + ' — ' + s.change + '</span></div></div>';
@@ -237,32 +241,26 @@
   }
 
   function renderInsights() {
-    setText('headline', '[1월~6월 기준] 7개 직영점 합산: 순매출 29.0억 / 총매출 30.1억 (순매출 목표 근접 98.8%) · 운영 가동률 71.8% · 이탈률 14.0% · MRR 5.3억 성장 중. 합산 최고 매출: A지점 8.1억.');
+    setText('headline', '[1월~7월 MTD 기준] 7개 직영점 합산: 순매출 33.3억 / 실결제매출 35.2억 (순매출 달성률 94.7%) · 운영 가동률 64.8% · 이탈률 13.8% · MRR 4.8억 성장 중. 합산 최고 매출: A지점 9.2억.');
     setHtml('riskList',
-      '<div class="risk-item"><div class="risk-dot critical"></div><span><strong>이탈률 심각 (14.0%)</strong><br>MRR 직접 손실 · 구독 기반 잠식 위험<br>담당: 사업운영팀 · 마케팅팀<br>→ 해지 방어 캠페인 즉시 실행 + 해지 원인 인터뷰 착수</span></div>' +
-      '<div class="risk-item"><div class="risk-dot warning"></div><span><strong>F지점·G지점·E지점 우선 점검</strong><br>목표 미달, 저가동, 이탈 리스크가 중첩된 매장입니다.</span></div>');
+      '<div class="risk-item"><div class="risk-dot critical"></div><span><strong>이탈률 심각 (13.8%)</strong><br>MRR 직접 손실 · 구독 기반 잠식 위험<br>담당: 사업운영팀 · 마케팅팀<br>→ 해지 방어 캠페인 즉시 실행 + 해지 원인 인터뷰 착수</span></div>' +
+      '<div class="risk-item"><div class="risk-dot warning"></div><span><strong>G지점·E지점·F지점 우선 점검</strong><br>목표 미달, 저가동, 이탈 리스크가 중첩된 매장입니다.</span></div>');
     setHtml('auditList',
-      '<div class="audit-item"><span class="audit-ok">✓</span> 모든 핵심 수치가 정상 범위로 렌더링되었습니다.</div>' +
-      '<div class="audit-item"><span class="audit-ok">✓</span> 매출·구독·가동률·환불율·이탈률 지표가 동일 기간 기준으로 정렬되었습니다.</div>' +
-      '<div class="audit-item"><span class="audit-ok">✓</span> 원본 구조 반영, 포트폴리오용 민감 정보 비식별 처리.</div>');
+      '<div class="audit-item"><span class="audit-ok">✓</span> 포트폴리오용 비식별 가상 데이터로 렌더링되었습니다.</div>' +
+      '<div class="audit-item"><span class="audit-ok">✓</span> 매출·구독·가동률·환불율·이탈률 지표가 1월~7월 MTD 기준으로 정렬되었습니다.</div>' +
+      '<div class="audit-item"><span class="audit-ok">✓</span> 이탈 사유 원천은 미연결 상태로 표시하여 확인되지 않은 사유 비율을 추정하지 않습니다.</div>');
   }
 
   function renderChurnClassPanel() {
-    var rows = [
-      { label:'가격/프로모션', pct:31, color:'#ae3f4d' },
-      { label:'서비스 품질', pct:26, color:'#b87030' },
-      { label:'이용 빈도 감소', pct:21, color:'#243350' },
-      { label:'경쟁/대체재', pct:13, color:'#1d6450' },
-      { label:'기타', pct:9, color:'#6b7280' },
-    ];
     setHtml('churnClassPanel',
-      '<div class="churn-class-box"><h2>이탈 원인 분류 분석</h2>' +
-      '<p class="sub">해지 사유 태그를 원본과 동일한 운영 액션 기준으로 재분류한 가상 데이터입니다.</p>' +
-      rows.map(function (r) {
-        return '<div class="churn-class-row"><span>' + r.label + '</span>' +
-          '<div class="churn-class-bar"><div class="churn-class-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>' +
-          '<span class="churn-class-val">' + r.pct + '%</span></div>';
-      }).join('') + '</div>');
+      '<div class="churn-class-box"><h2>이탈 사유 데이터 상태</h2>' +
+      '<p class="sub">해지 사유 원천 미연결 · 확인되지 않은 비율 추정은 표시하지 않습니다.</p>' +
+      '<div class="ops-mini-stats">' +
+        '<div class="ops-mini-stat"><span>최근월 해지</span><strong>744명</strong></div>' +
+        '<div class="ops-mini-stat"><span>선택 기간 해지</span><strong>' + fmtNum(PORTFOLIO.churnCount) + '명</strong></div>' +
+        '<div class="ops-mini-stat"><span>필요 원천</span><strong>CRM/PG</strong></div>' +
+      '</div>' +
+      '<div class="pipe-footer">CRM 해지 사유 코드와 PG 결제 실패 로그가 연결되면 자발·비자발 이탈을 실제 수치로 분류할 수 있습니다.</div></div>');
   }
 
   function renderStoreSelect() {
@@ -283,7 +281,7 @@
         '<td>' + fmtEok(s.rev) + '</td>' +
         '<td><span class="' + achClass + '">' + fmtPct(s.ach) + '</span></td>' +
         '<td>' + fmtEok(s.netRev) + '</td>' +
-        '<td>' + fmtNum(s.usage) + '건</td>' +
+        '<td>' + fmtNum(s.usage) + '대</td>' +
         '<td>' + fmtPct(s.util) + '</td>' +
         '<td>' + fmtPct(s.refund) + '</td>' +
         '<td style="color:' + (s.netChange >= 0 ? '#1d6450' : '#ae3f4d') + ';font-weight:700">' + signed(s.netChange, '명') + '</td>' +
@@ -344,7 +342,7 @@
     var totalLoss = PORTFOLIO.capacityOpportunity;
     var summary = '<div class="cap-summary">' +
       '<div class="cap-sum-item"><div class="cap-sum-label">평균 가동률</div><div class="cap-sum-val">' + fmtPct(avgUtil) + '</div></div>' +
-      '<div class="cap-sum-item"><div class="cap-sum-label">연평균 기준 대수/월</div><div class="cap-sum-val">45,741</div></div>' +
+      '<div class="cap-sum-item"><div class="cap-sum-label">연평균 기준 대수/월</div><div class="cap-sum-val">43,860</div></div>' +
       '<div class="cap-sum-item"><div class="cap-sum-label">유휴 Capacity</div><div class="cap-sum-val bad">' + fmtNum(PORTFOLIO.idleCapacity) + '</div></div>' +
       '<div class="cap-sum-item"><div class="cap-sum-label">기회금액 상한</div><div class="cap-sum-val bad">' + fmtEok(totalLoss) + '</div></div>' +
       '<div class="cap-sum-item"><div class="cap-sum-label">운영 매장</div><div class="cap-sum-val">' + STORES.length + '</div></div>' +
@@ -355,17 +353,19 @@
         '<span class="cap-store-util" style="color:' + color + '">' + fmtPct(s.util) + '</span></div>' +
         '<div class="cap-bar-wrap"><div class="cap-bar" style="width:' + Math.min(100, s.util) + '%;background:' + color + '"></div></div>' +
         '<div class="cap-store-meta"><span>유휴 Capacity</span><span>' + fmtNum(s.idle) + '대</span></div>' +
-        '<div class="cap-idle">기회금액 상한: ' + fmtEok(s.opp) + '</div></div>';
+        '<div class="cap-idle">기회금액 상한: ' + fmtEok(s.opp) + ' · MTD 기준</div></div>';
     }).join('') + '</div>';
     setHtml('capacityPanel', summary + grid);
   }
 
   function renderPayment() {
     setHtml('paymentPanel',
-      '<div class="pay-item accent"><div class="pay-label">건당 총매출</div><div class="pay-val">₩10,342</div><div class="pay-note">총매출 / 총사용</div></div>' +
-      '<div class="pay-item navy"><div class="pay-label">건당 순매출</div><div class="pay-val">₩9,934</div><div class="pay-note">환불·할인 반영 후</div></div>' +
-      '<div class="pay-item green"><div class="pay-label">구독 ARPU</div><div class="pay-val">₩61,200</div><div class="pay-note">월말 유지 구독자 기준</div></div>' +
-      '<div class="pay-item amber"><div class="pay-label">기회 단가</div><div class="pay-val">₩11,089</div><div class="pay-note">Capacity 손실 산정 기준</div></div>');
+      '<div class="pay-item accent"><div class="pay-label">건당 매출</div><div class="pay-val">₩10,718</div><div class="pay-note">실결제매출 ÷ 총사용</div></div>' +
+      '<div class="pay-item navy"><div class="pay-label">건당 순매출</div><div class="pay-val">₩10,139</div><div class="pay-note">환불·기타 차감 후</div></div>' +
+      '<div class="pay-item green"><div class="pay-label">구독 ARPU</div><div class="pay-val">₩42,300</div><div class="pay-note">MRR ÷ 전체 활성 구독자</div></div>' +
+      '<div class="pay-item amber"><div class="pay-label">목표 실현 단가</div><div class="pay-val">₩14,100</div><div class="pay-note">Capacity 기회금액 상한 기준</div></div>' +
+      '<div class="pay-item green"><div class="pay-label">ARR</div><div class="pay-val">57.8억</div><div class="pay-note">YoY +' + fmtPct(PORTFOLIO.mrrYoY) + '</div></div>' +
+      '<div class="pay-item navy"><div class="pay-label">LTV 추정</div><div class="pay-val">306,522원</div><div class="pay-note">ARPU ÷ 월 이탈률 추정</div></div>');
   }
 
   function alignOriginalLabels() {
@@ -383,9 +383,9 @@
     setText('detailTitle', s.name + ' 상세');
     setText('detailSub', '운영점수 ' + s.score + '점 · ' + s.status + ' · 순매출 달성률 ' + fmtPct(s.ach));
     var detail = [
-      { label:'총매출', val:fmtEok(s.rev), sub:'기간 합산', delta:'달성률 ' + fmtPct(s.ach), trend:s.ach >= 95 ? 'up' : 'down' },
+      { label:'실결제매출', val:fmtEok(s.rev), sub:'기간 합산', delta:'달성률 ' + fmtPct(s.ach), trend:s.ach >= 95 ? 'up' : 'down' },
       { label:'순매출', val:fmtEok(s.netRev), sub:'환불·할인 반영', delta:'환불율 ' + fmtPct(s.refund), trend:s.refund <= 4 ? 'up' : 'down' },
-      { label:'가동률', val:fmtPct(s.util), sub:'보정 Capacity 기준', delta:'유휴 ' + fmtNum(s.idle) + '대', trend:s.util >= 65 ? 'up' : 'down' },
+      { label:'가동률', val:fmtPct(s.util), sub:'원천 Capacity 기준', delta:'유휴 ' + fmtNum(s.idle) + '대', trend:s.util >= 65 ? 'up' : 'down' },
       { label:'이탈률', val:fmtPct(s.churn), sub:'목표 10% 이하', delta:s.churn > 12 ? '긴급 관리' : '관리 가능', trend:s.churn > 12 ? 'down' : 'up' },
       { label:'MRR', val:fmtEok(s.mrr), sub:'월 반복 매출', delta:'ARPU ₩' + fmtNum(s.arpu), trend:'up' },
       { label:'순증감', val:signed(s.netChange, '명'), sub:'신규−해지', delta:s.netChange >= 0 ? '순증' : '순감', trend:s.netChange >= 0 ? 'up' : 'down' },
@@ -395,9 +395,9 @@
     }).join(''));
     setHtml('subPipeline',
       '<div class="pipe-row"><div class="pipe-label">월말 유지</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:82%;background:#1d6450"></div><span class="pipe-val">' + fmtNum(PORTFOLIO.retained) + '명</span></div><div class="pipe-footer">전체 포트폴리오 기준</div></div>' +
-      '<div class="pipe-row"><div class="pipe-label">신규</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:76%;background:#243350"></div><span class="pipe-val">+' + fmtNum(PORTFOLIO.newSubs) + '명</span></div><div class="pipe-footer">6개월 합산 신규</div></div>' +
+      '<div class="pipe-row"><div class="pipe-label">신규</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:76%;background:#243350"></div><span class="pipe-val">+' + fmtNum(PORTFOLIO.newSubs) + '명</span></div><div class="pipe-footer">7개월 합산 신규</div></div>' +
       '<div class="pipe-row"><div class="pipe-label">해지</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:68%;background:#ae3f4d"></div><span class="pipe-val">-' + fmtNum(PORTFOLIO.churnCount) + '명</span></div><div class="pipe-footer">해지 방어 필요</div></div>' +
-      '<div class="pipe-row"><div class="pipe-label">순증</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:40%;background:#8f4219"></div><span class="pipe-val">+' + fmtNum(PORTFOLIO.netChange) + '명</span></div><div class="pipe-footer">신규 대비 순증 효율 점검</div></div>');
+      '<div class="pipe-row"><div class="pipe-label">순증감</div><div class="pipe-bar-wrap"><div class="pipe-bar" style="width:40%;background:#8f4219"></div><span class="pipe-val">' + signed(PORTFOLIO.netChange, '명') + '</span></div><div class="pipe-footer">신규 대비 순증 효율 점검</div></div>');
   }
 
   function axisStyle() {
@@ -413,20 +413,20 @@
   }
 
   function renderMiniDetails() {
-    setHtml('opsUtilDetail', '<div class="ops-mini-kv"><strong>운영 가동률 ' + fmtPct(PORTFOLIO.util) + '</strong><span>목표 75%까지 3.2%p, 유휴 Capacity ' + fmtNum(PORTFOLIO.idleCapacity) + '대</span></div>');
-    setHtml('opsChurnDetail', '<div class="ops-mini-kv"><strong>이탈률 ' + fmtPct(PORTFOLIO.churn) + ' · 환불율 3.7%</strong><span>해지 방어 캠페인과 환불 원인 분류를 동시에 진행</span></div>');
-    setHtml('opsArpuDetail', '<div class="ops-mini-kv"><strong>ARPU 6.1만원 · 쿠폰할인율 5.1%</strong><span>상품 믹스와 할인 정책을 순매출 관점으로 재점검</span></div>');
+    setHtml('opsUtilDetail', '<div class="ops-mini-kv"><strong>운영 가동률 ' + fmtPct(PORTFOLIO.util) + '</strong><span>목표 75%까지 10.2%p, 유휴 Capacity ' + fmtNum(PORTFOLIO.idleCapacity) + '대</span></div>');
+    setHtml('opsChurnDetail', '<div class="ops-mini-kv"><strong>이탈률 ' + fmtPct(PORTFOLIO.churn) + ' · 환불율 ' + fmtPct(PORTFOLIO.refund) + '</strong><span>해지 방어 캠페인과 환불 원인 분류를 동시에 진행</span></div>');
+    setHtml('opsArpuDetail', '<div class="ops-mini-kv"><strong>ARPU 4.2만원 · 쿠폰할인율 ' + fmtPct(PORTFOLIO.couponRate) + '</strong><span>상품 믹스와 할인 정책을 순매출 관점으로 재점검</span></div>');
     setHtml('opsUtilStats',
       '<div class="ops-mini-stat"><span>목표</span><strong>75.0%</strong></div>' +
-      '<div class="ops-mini-stat"><span>Gap</span><strong>-3.2%p</strong></div>' +
+      '<div class="ops-mini-stat"><span>Gap</span><strong>-10.2%p</strong></div>' +
       '<div class="ops-mini-stat"><span>유휴</span><strong>' + fmtNum(PORTFOLIO.idleCapacity) + '대</strong></div>');
     setHtml('opsChurnStats',
       '<div class="ops-mini-stat"><span>해지</span><strong>' + fmtNum(PORTFOLIO.churnCount) + '건</strong></div>' +
-      '<div class="ops-mini-stat"><span>환불율</span><strong>3.7%</strong></div>' +
+      '<div class="ops-mini-stat"><span>환불율</span><strong>' + fmtPct(PORTFOLIO.refund) + '</strong></div>' +
       '<div class="ops-mini-stat"><span>목표</span><strong>10% 이하</strong></div>');
     setHtml('opsArpuStats',
-      '<div class="ops-mini-stat"><span>ARPU</span><strong>6.1만원</strong></div>' +
-      '<div class="ops-mini-stat"><span>할인율</span><strong>5.1%</strong></div>' +
+      '<div class="ops-mini-stat"><span>ARPU</span><strong>4.2만원</strong></div>' +
+      '<div class="ops-mini-stat"><span>할인율</span><strong>' + fmtPct(PORTFOLIO.couponRate) + '</strong></div>' +
       '<div class="ops-mini-stat"><span>순매출</span><strong>' + fmtEok(PORTFOLIO.net) + '</strong></div>');
   }
 
@@ -434,10 +434,10 @@
     tryChart('performanceChart', {
       type:'line',
       data:{ labels:MONTHS, datasets:[
-        { label:'목표매출', data:[4.1,4.4,4.8,5.0,5.5,5.5], borderColor:'#b0a898', borderDash:[4,4], backgroundColor:'transparent', tension:.35 },
-        { label:'총매출', data:[3.9,4.7,5.1,5.3,6.0,5.1], borderColor:'#243350', backgroundColor:'#24335022', tension:.35, pointRadius:3 },
-        { label:'순매출', data:[3.7,4.5,4.9,5.1,5.8,5.0], borderColor:'#1d6450', backgroundColor:'#1d645022', tension:.35, pointRadius:3 },
-        { label:'MRR', data:[4.6,4.7,4.8,5.0,5.2,5.3], borderColor:'#8f4219', backgroundColor:'#8f421922', tension:.35, pointRadius:3 },
+        { label:'목표매출', data:[4.3,4.6,4.9,5.1,5.6,5.9,4.8], borderColor:'#b0a898', borderDash:[4,4], backgroundColor:'transparent', tension:.35 },
+        { label:'실결제매출', data:[4.1,4.5,4.9,5.2,5.8,5.9,4.8], borderColor:'#243350', backgroundColor:'#24335022', tension:.35, pointRadius:3 },
+        { label:'순매출', data:[3.9,4.3,4.6,4.9,5.4,5.6,4.6], borderColor:'#1d6450', backgroundColor:'#1d645022', tension:.35, pointRadius:3 },
+        { label:'MRR', data:[4.21,4.32,4.41,4.50,4.61,4.73,4.82], borderColor:'#8f4219', backgroundColor:'#8f421922', tension:.35, pointRadius:3 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() }
     });
@@ -445,8 +445,8 @@
     tryChart('scoreChart', {
       type:'radar',
       data:{ labels:['순매출 달성','가동률','이탈관리','환불관리','MRR 성장','순증감'], datasets:[
-        { label:'전체 평균', data:[99,72,60,82,86,68], borderColor:'#243350', backgroundColor:'#24335022', pointRadius:3 },
-        { label:'A지점', data:[100,89,82,92,91,80], borderColor:'#1d6450', backgroundColor:'#1d645020', pointRadius:2 },
+        { label:'전체 평균', data:[95,65,62,80,78,56], borderColor:'#243350', backgroundColor:'#24335022', pointRadius:3 },
+        { label:'A지점', data:[100,80,76,88,82,64], borderColor:'#1d6450', backgroundColor:'#1d645020', pointRadius:2 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ r:{ ticks:{ color:'#888', backdropColor:'transparent' }, grid:{ color:'#e0d8cc' }, pointLabels:{ color:'#555', font:{ size:10 } } } } }
     });
@@ -454,10 +454,10 @@
     tryChart('subscriptionChart', {
       type:'bar',
       data:{ labels:MONTHS, datasets:[
-        { label:'유지', data:[7610,7800,8010,8220,8520,8674], backgroundColor:'#243350' },
-        { label:'신규', data:[1080,1240,1390,1420,1540,1485], backgroundColor:'#1d6450' },
-        { label:'해지', data:[-970,-1050,-1210,-1270,-1330,-1445], backgroundColor:'#ae3f4d' },
-        { label:'순증감', type:'line', data:[110,190,180,150,210,40], borderColor:'#8f4219', backgroundColor:'transparent', tension:.35, pointRadius:4 },
+        { label:'유지', data:[7860,7990,8120,8260,8440,8610,7740], backgroundColor:'#243350' },
+        { label:'신규', data:[1040,1110,1220,1280,1370,1490,706], backgroundColor:'#1d6450' },
+        { label:'해지', data:[-1132,-1174,-1338,-1186,-1232,-1144,-858], backgroundColor:'#ae3f4d' },
+        { label:'순증감', type:'line', data:[-92,-64,-118,94,138,346,-152], borderColor:'#8f4219', backgroundColor:'transparent', tension:.35, pointRadius:4 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() }
     });
@@ -465,36 +465,36 @@
     tryChart('opsUtilChart', {
       type:'line',
       data:{ labels:MONTHS, datasets:[
-        { label:'가동률', data:[61.2,64.8,68.4,70.1,72.4,71.8], borderColor:'#243350', backgroundColor:'#24335022', fill:true, tension:.35 },
-        { label:'목표 75%', data:[75,75,75,75,75,75], borderColor:'#b87030', borderDash:[5,5], pointRadius:0 },
+        { label:'가동률', data:[73.1,73.4,68.7,77.2,65.8,55.1,40.8], borderColor:'#243350', backgroundColor:'#24335022', fill:true, tension:.35 },
+        { label:'목표 75%', data:[75,75,75,75,75,75,75], borderColor:'#b87030', borderDash:[5,5], pointRadius:0 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() }
     });
     tryChart('opsChurnChart', {
       type:'line',
       data:{ labels:MONTHS, datasets:[
-        { label:'이탈률', data:[13.1,12.7,13.8,14.4,13.6,14.0], borderColor:'#ae3f4d', backgroundColor:'#ae3f4d22', tension:.35 },
-        { label:'환불율', data:[4.8,4.3,3.9,3.6,3.4,3.7], borderColor:'#b87030', backgroundColor:'#b8703022', tension:.35 },
+        { label:'이탈률', data:[16.4,16.8,18.9,12.2,11.3,11.6,9.6], borderColor:'#ae3f4d', backgroundColor:'#ae3f4d22', tension:.35 },
+        { label:'환불율', data:[4.2,4.1,4.3,3.0,3.2,3.4,4.0], borderColor:'#b87030', backgroundColor:'#b8703022', tension:.35 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() }
     });
     tryChart('opsArpuChart', {
       type:'bar',
       data:{ labels:MONTHS, datasets:[
-        { label:'ARPU(만원)', data:[5.7,5.8,5.9,6.0,6.1,6.1], backgroundColor:'#1d6450' },
-        { label:'쿠폰할인율(%)', type:'line', data:[6.8,6.1,5.7,5.4,5.0,5.1], borderColor:'#8f4219', backgroundColor:'transparent', tension:.35 },
+        { label:'ARPU(만원)', data:[4.1,4.1,4.2,4.2,4.2,4.3,4.2], backgroundColor:'#1d6450' },
+        { label:'쿠폰할인율(%)', type:'line', data:[0.2,0.2,0.3,0.6,1.1,1.8,1.0], borderColor:'#8f4219', backgroundColor:'transparent', tension:.35 },
       ]},
       options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() }
     });
 
-    tryChart('mrrTrendChart', { type:'line', data:{ labels:MONTHS, datasets:[{ label:'MRR(억)', data:[4.6,4.7,4.8,5.0,5.2,5.3], borderColor:'#8f4219', backgroundColor:'#8f421922', fill:true, tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
-    tryChart('bridgeChart', { type:'bar', data:{ labels:['정가 추정','쿠폰할인','총매출','환불','순매출'], datasets:[{ label:'매출 브리지(억)', data:[32.6,-1.7,30.1,-1.1,29.0], backgroundColor:['#243350','#b87030','#1d6450','#ae3f4d','#8f4219'] }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
-    tryChart('healthChart', { type:'doughnut', data:{ labels:['우수','관리','주의','위험'], datasets:[{ data:[1,2,1,3], backgroundColor:['#1d6450','#243350','#b87030','#ae3f4d'] }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:basePlugins } });
-    tryChart('mixChart', { type:'pie', data:{ labels:['순매출','쿠폰할인','환불','기타'], datasets:[{ data:[29.0,1.7,1.1,.8], backgroundColor:['#1d6450','#b87030','#ae3f4d','#6b7280'] }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins } });
-    tryChart('quarterChart', { type:'bar', data:{ labels:['Q1','Q2'], datasets:[{ label:'목표', data:[13.3,16.0], backgroundColor:'#ddd6cc' }, { label:'순매출', data:[13.1,15.9], backgroundColor:'#243350' }, { label:'순증감', type:'line', data:[480,400], borderColor:'#8f4219', yAxisID:'y1' }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ y:axisStyle(), y1:Object.assign({}, axisStyle(), { position:'right', grid:{ drawOnChartArea:false } }), x:axisStyle() } } });
+    tryChart('mrrTrendChart', { type:'line', data:{ labels:MONTHS, datasets:[{ label:'MRR(억)', data:[4.21,4.32,4.41,4.50,4.61,4.73,4.82], borderColor:'#8f4219', backgroundColor:'#8f421922', fill:true, tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
+    tryChart('bridgeChart', { type:'bar', data:{ labels:['쿠폰 적용 전 추정액','쿠폰할인','실결제매출','환불','순매출'], datasets:[{ label:'수익 브리지(억)', data:[35.55,-0.35,35.2,-1.9,33.3], backgroundColor:['#243350','#b87030','#1d6450','#ae3f4d','#8f4219'] }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
+    tryChart('healthChart', { type:'doughnut', data:{ labels:['우수','관리','주의','위험'], datasets:[{ data:[0,2,3,2], backgroundColor:['#1d6450','#243350','#b87030','#ae3f4d'] }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:basePlugins } });
+    tryChart('mixChart', { type:'pie', data:{ labels:['순매출','쿠폰할인','환불','기타'], datasets:[{ data:[33.3,0.35,1.9,0], backgroundColor:['#1d6450','#b87030','#ae3f4d','#6b7280'] }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins } });
+    tryChart('quarterChart', { type:'bar', data:{ labels:['Q1','Q2','Q3 MTD'], datasets:[{ label:'목표', data:[13.8,16.6,4.8], backgroundColor:'#ddd6cc' }, { label:'순매출', data:[12.8,15.9,4.6], backgroundColor:'#243350' }, { label:'순증감', type:'line', data:[-274,578,-152], borderColor:'#8f4219', yAxisID:'y1' }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ y:axisStyle(), y1:Object.assign({}, axisStyle(), { position:'right', grid:{ drawOnChartArea:false } }), x:axisStyle() } } });
     tryChart('scatterChart', { type:'bubble', data:{ datasets:STORES.map(function(s, i){ return { label:s.name, data:[{ x:s.ach, y:s.churn, r:Math.max(6, s.rev * 1.6) }], backgroundColor:PALETTE[i] + 'bb' }; }) }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ x:Object.assign({}, axisStyle(), { title:{ display:true, text:'순매출 달성률(%)', color:'#666' } }), y:Object.assign({}, axisStyle(), { title:{ display:true, text:'이탈률(%)', color:'#666' } }) } } });
-    tryChart('momentumChart', { type:'line', data:{ labels:MONTHS, datasets:[{ label:'총매출 YoY', data:[4.8,7.2,9.1,11.4,14.8,15.7], borderColor:'#243350', backgroundColor:'transparent', tension:.35 }, { label:'가동률 YoY', data:[1.4,2.0,3.1,4.2,4.8,4.9], borderColor:'#1d6450', backgroundColor:'transparent', tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
-    tryChart('seasonChart', { type:'bar', data:{ labels:MONTHS, datasets:[{ label:'세차 대수', data:[39210,42480,45410,47520,49230,47608], backgroundColor:'#8f4219' }, { label:'계절 지수', type:'line', data:[.86,.93,.99,1.04,1.08,1.04], borderColor:'#243350', yAxisID:'y1', tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ y:axisStyle(), y1:Object.assign({}, axisStyle(), { position:'right', grid:{ drawOnChartArea:false } }), x:axisStyle() } } });
+    tryChart('momentumChart', { type:'line', data:{ labels:MONTHS, datasets:[{ label:'실결제매출 YoY', data:[5.2,6.1,7.6,9.4,11.8,12.6,10.9], borderColor:'#243350', backgroundColor:'transparent', tension:.35 }, { label:'가동률 Gap', data:[-1.9,-1.6,-6.3,2.2,-9.2,-19.9,-34.2], borderColor:'#1d6450', backgroundColor:'transparent', tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:axesStyle() } });
+    tryChart('seasonChart', { type:'bar', data:{ labels:MONTHS, datasets:[{ label:'세차 대수', data:[40120,42340,45260,47890,48610,47480,31220], backgroundColor:'#8f4219' }, { label:'계절 지수', type:'line', data:[.88,.93,.99,1.05,1.06,1.04,.68], borderColor:'#243350', yAxisID:'y1', tension:.35 }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:basePlugins, scales:{ y:axisStyle(), y1:Object.assign({}, axisStyle(), { position:'right', grid:{ drawOnChartArea:false } }), x:axisStyle() } } });
     renderMiniDetails();
   }
 
@@ -523,7 +523,7 @@
     var store = STORES.filter(function(s) { return s.id === id; })[0];
     if (!store) {
       setText('focusLabel', '전체 합산');
-      setText('focusSub', '6개월 합산 · 운영 7개 매장');
+      setText('focusSub', '7개월 합산 · 최신월 MTD · 운영 7개 매장');
       renderDetailPanel(STORES[0]);
       return;
     }
