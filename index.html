@@ -6,28 +6,17 @@
   <title>[OPS] 직영점 운영 대시보드</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <script src="./vendor/chart.umd.min.js"></script>
+  <script src="./vendor/chartjs-plugin-datalabels.min.js"></script>
   <link rel="stylesheet" href="./style.css">
-  <style>
-    .portfolio-banner{
-      position:fixed;bottom:0;left:0;right:0;z-index:99999;
-      background:linear-gradient(90deg,#1a2740,#8f4219);
-      color:#fff;font-size:12px;font-weight:700;
-      padding:8px 20px;text-align:center;letter-spacing:.03em;
-      box-shadow:0 -4px 20px rgba(0,0,0,.25);
-    }
-    body{padding-bottom:40px}
-  </style>
+  <!-- 인증 가드: 쿠키 없이 직접 접근 시 로그인 페이지로 이동 -->
+  
 </head>
 <body>
-<div class="portfolio-banner">
-  📊 포트폴리오 데모 · 원본 운영 구조를 반영한 비식별 가상 데이터입니다 · 실제 운영 대시보드 구현 결과물
-</div>
 <div id="loadingOverlay">
   <div class="load-inner">
     <div class="spin-ring"></div>
-    <div class="load-label" id="loadText">데이터를 불러오는 중…</div>
+    <div class="load-label" id="loadText">스프레드시트에서 데이터를 불러오는 중…</div>
     <div class="load-steps" id="loadSteps">
       <span class="load-step done">연결 중</span>
       <span class="load-step" id="lstep-sheets">매출 시트</span>
@@ -39,31 +28,30 @@
 </div>
 <div class="wrap">
   <div id="errBanner"></div>
+  <div id="refreshNotice" role="status" hidden></div>
   <header class="hero">
     <div class="hero-top">
       <div class="hero-copy">
-        <div class="eyebrow">OPS Direct Store Cockpit · 2026</div>
+        <div class="eyebrow">OPS Direct Store Cockpit / 비식별 가상 데이터</div>
         <h1>[OPS] 직영점 운영 대시보드</h1>
-        <p>매출·구독·운영 건전성·Capacity 기회금액을 원본 운영 흐름에 맞춰 재현했습니다.<br>드롭다운 선택 시 전체 지표가 해당 매장 기준으로 재계산됩니다.</p>
+        <p>매출/구독/운영 건전성/매장 포지션을 5분 주기로 갱신합니다.<br>드롭다운 선택 시 전체 지표가 해당 매장 기준으로 재계산됩니다.</p>
         <div class="hero-kpi-strip" id="heroKpiStrip"></div>
       </div>
       <div class="hero-focus">
         <div class="focus-chip">현재 분석 대상</div>
-        <div class="focus-value" id="focusLabel">전체 포트폴리오</div>
-        <div class="focus-score" id="focusScore" style="display:flex">
-          <span class="score-badge" id="scoreBadgeVal">81</span>
-          <span class="score-rank" id="scoreBadgeRank">/ 100점</span>
+        <div class="focus-value" id="focusLabel">불러오는 중…</div>
+        <div class="focus-score" id="focusScore">
+          <span class="score-badge" id="scoreBadgeVal">—</span>
+          <span class="score-rank" id="scoreBadgeRank"></span>
         </div>
         <div class="focus-sub" id="focusSub">포트폴리오 합산</div>
       </div>
     </div>
     <div class="hero-meta">
-      <span class="meta-pill ok" id="updatedAt">업데이트: 2025-05-06 09:00</span>
-      <span class="meta-pill">📊 전체 7개 매장 합산 · 전체</span>
-      <span class="meta-pill">📅 1월~7월 MTD (7개월)</span>
-      <span class="meta-pill ok" id="auditBadge">정합성 이상 없음</span>
-      <span class="meta-pill">🗂 원천 매출 7.26 · 전일까지 반영</span>
-      <span class="meta-pill">↻ 자동갱신 5분</span>
+      <span class="meta-pill" id="updatedAt">업데이트: —</span>
+      <span class="meta-pill">기준: 활성 탭</span>
+      <span class="meta-pill">자동 갱신: 5분</span>
+      <span class="meta-pill" id="auditBadge">정합성 점검 중</span>
     </div>
   </header>
 
@@ -71,6 +59,7 @@
     <div class="toggle" id="quarterToggle">
       <button data-q="all" class="active">전체</button>
       <button data-q="H1">H1</button>
+      <button data-q="H2">H2</button>
       <button data-q="Q1">Q1</button>
       <button data-q="Q2">Q2</button>
       <button data-q="Q3">Q3</button>
@@ -78,7 +67,7 @@
     <select id="storeSelect" aria-label="매장 선택"></select>
     <span class="toolbar-status">
       <span class="status-dot" id="statusDot"></span>
-      <span id="statusText">정상</span>
+      <span id="statusText">로드 중…</span>
     </span>
     <button id="refreshBtn" type="button">↻ 새로고침</button>
   </section>
@@ -96,7 +85,7 @@
     </div>
     <div class="ac-card ac-danger">
       <div class="ac-head">
-        <span class="ac-icon">⚠</span>
+        <span class="ac-icon">🔎</span>
         <span class="ac-title">우선 점검 매장 3곳</span>
         <span class="ac-badge danger" id="acDangerCount">—</span>
       </div>
@@ -111,6 +100,13 @@
     </div>
   </section>
 
+  <details id="dataReference" class="data-reference" hidden>
+    <summary id="qualitySummary">데이터 참고사항 / 상세 보기</summary>
+    <div class="data-reference-body">
+      <div id="sourceCoverage" hidden></div>
+      <div id="auditList"></div>
+    </div>
+  </details>
   <section class="gauge-grid">
     <article class="panel gauge-panel">
       <div class="gauge-badge" id="gbadge-ach"></div>
@@ -144,7 +140,7 @@
 
   <details style="margin-bottom:14px">
     <summary style="cursor:pointer;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);font-size:12.5px;font-weight:700;color:var(--muted);list-style:none;display:flex;align-items:center;gap:6px">
-      <span>▶</span> 상세 KPI 카드 (실결제매출·순매출·MRR·가동률·이탈률·순증감 월별 스파크라인)
+      <span>▶</span> 상세 KPI 카드 (실결제매출/순매출/MRR/가동률/이탈률/순증감 월별 스파크라인)
     </summary>
     <section class="kpis" id="kpiGrid" style="margin-top:8px"></section>
   </details>
@@ -153,119 +149,156 @@
   <section class="insights">
     <article class="panel">
       <h2><span class="section-icon accent">📊</span>핵심 요약</h2>
-      <p id="headline" style="font-size:13px;line-height:1.75;color:#4a3f35">—</p>
+      <div id="headline" class="summary-content" aria-live="polite">—</div>
     </article>
     <article class="panel">
       <h2><span class="section-icon rose">⚠</span>우선 리스크</h2>
       <div id="riskList" style="display:flex;flex-direction:column;gap:7px"></div>
     </article>
-    <article class="panel">
-      <h2><span class="section-icon navy">✓</span>데이터 정합성</h2>
-      <div id="auditList" style="display:flex;flex-direction:column;gap:4px"></div>
-    </article>
   </section>
 
-  <div class="chart-master-grid">
-    <article class="panel col-8">
-      <div class="section-header"><div><h2>매출 콕핏</h2><p class="sub" style="margin-bottom:0">목표·실결제매출·순매출·순매출 달성률·MRR 월별 추적</p></div><span class="section-tag live">5MIN SYNC</span></div>
+  <div class="dashboard-row">
+    <article class="panel">
+      <div class="section-header"><div><h2>매출 콕핏</h2><p class="sub" style="margin-bottom:0">목표/실결제매출/순매출/순매출 달성률/MRR 월별 추적</p></div><span class="section-tag live">5MIN SYNC</span></div>
       <div class="chart xl"><canvas id="performanceChart"></canvas></div>
     </article>
-    <article class="panel col-4">
-      <h2 id="scoreTitle">매장별 운영 스코어</h2>
+    <article class="panel">
+      <h2 id="scoreTitle">운영 레버 스코어</h2>
       <p class="sub" id="scoreSub">6개 지표 가중 종합 점수</p>
       <div class="chart lg"><canvas id="scoreChart"></canvas></div>
     </article>
-    <article class="panel col-6">
+  </div>
+  <div class="dashboard-row">
+    <article class="panel">
       <h2>구독 엔진</h2>
-      <p class="sub">유지·신규·해지·순증감 월별 흐름</p>
+      <p class="sub">유지/신규/해지/순증감 월별 흐름</p>
       <div class="chart lg"><canvas id="subscriptionChart"></canvas></div>
-      <div id="churnClassPanel" style="margin-top:16px"></div>
     </article>
-    <article class="panel col-6 ops-diagnostics-panel">
-      <div class="chart-section-head">
-        <div><h2>① 가동률 추이</h2><p class="sub">목표 75% 기준선 · 원천 MTD Capacity 적용</p></div>
-        <button class="collapse-toggle" data-target="opsUtilDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
-      </div>
-      <div class="chart sm"><canvas id="opsUtilChart"></canvas></div>
-      <div id="opsUtilDetail" class="ops-mini-detail"></div>
-      <div id="opsUtilStats" class="ops-mini-stats"></div>
-
-      <div class="chart-section-head stacked">
-        <div><h2>② 이탈·환불 리스크</h2><p class="sub">이탈률 · 환불율 월별 추이</p></div>
-        <button class="collapse-toggle" data-target="opsChurnDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
-      </div>
-      <div class="chart sm"><canvas id="opsChurnChart"></canvas></div>
-      <div id="opsChurnDetail" class="ops-mini-detail"></div>
-      <div id="opsChurnStats" class="ops-mini-stats"></div>
-
-      <div class="chart-section-head stacked">
-        <div><h2>③ 쿠폰할인·ARPU 수익성</h2><p class="sub">쿠폰 적용 전 추정액 대비 할인율 · ARPU</p></div>
-        <button class="collapse-toggle" data-target="opsArpuDetail"><span class="arrow">▾</span><span class="toggle-label">상세</span></button>
-      </div>
-      <div class="chart sm"><canvas id="opsArpuChart"></canvas></div>
-      <div id="opsArpuDetail" class="ops-mini-detail"></div>
-      <div id="opsArpuStats" class="ops-mini-stats"></div>
-    </article>
-    <article class="panel col-6">
+    <article class="panel">
       <div class="chart-section-head">
         <div><h2>MRR 성장 트렌드</h2><p class="sub">월별 MRR + YoY 성장률 콤보</p></div>
-        <button class="collapse-toggle" data-target="mrrTrendWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
+        <button class="collapse-toggle" data-target="mrrTrendWrap" aria-label="접기"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="mrrTrendWrap" class="collapsible-content">
         <div class="chart lg"><canvas id="mrrTrendChart"></canvas></div>
       </div>
     </article>
-    <article class="panel col-6">
+  </div>
+  <div class="dashboard-row ops-trend-row">
+    <article class="panel">
+      <!-- ① 가동률 추이 -->
+      <div class="ops-sub-section">
+        <div class="chart-section-head" style="margin-bottom:6px">
+          <div>
+            <h2 style="font-size:13.5px;margin:0">① 가동률 추이</h2>
+            <p class="sub" style="margin:0">주의 기준 70% / 기간 전체 Capacity / 잠정값은 점선</p>
+          </div>
+          <button class="collapse-toggle collapsed" data-target="opsUtilDetail" aria-label="상세 보기">
+            <span class="arrow">▾</span><span class="toggle-label">상세</span>
+          </button>
+        </div>
+        <div class="chart" style="height:160px"><canvas id="opsUtilChart"></canvas></div>
+        <div id="opsUtilDetail" class="collapsible-content collapsed" style="margin-top:8px">
+          <div id="opsUtilStats"></div>
+        </div>
+      </div>
+
+      <!-- ② 이탈/환불 리스크 추이 -->
+    </article>
+    <article class="panel">
+      <div class="ops-sub-section">
+        <div class="chart-section-head" style="margin-bottom:6px">
+          <div>
+            <h2 style="font-size:13.5px;margin:0">② 이탈/환불 리스크</h2>
+            <p class="sub" style="margin:0">이탈률 / 환불율 월별 추이</p>
+          </div>
+          <button class="collapse-toggle collapsed" data-target="opsChurnDetail" aria-label="상세 보기">
+            <span class="arrow">▾</span><span class="toggle-label">상세</span>
+          </button>
+        </div>
+        <div class="chart" style="height:160px"><canvas id="opsChurnChart"></canvas></div>
+        <div id="opsChurnDetail" class="collapsible-content collapsed" style="margin-top:8px">
+          <div id="opsChurnStats"></div>
+        </div>
+      </div>
+
+      <!-- ③ 쿠폰할인 및 매장PASS ARPU 수익성 -->
+    </article>
+    <article class="panel">
+      <div class="ops-sub-section">
+        <div class="chart-section-head" style="margin-bottom:6px">
+          <div>
+            <h2 style="font-size:13.5px;margin:0">③ 쿠폰할인/매장PASS ARPU 수익성</h2>
+            <p class="sub" style="margin:0">실결제매출 대비 지정 쿠폰 비중 / 구독자-월 노출 기준 ARPU</p>
+          </div>
+          <button class="collapse-toggle collapsed" data-target="opsArpuDetail" aria-label="상세 보기">
+            <span class="arrow">▾</span><span class="toggle-label">상세</span>
+          </button>
+        </div>
+        <div class="chart" style="height:160px"><canvas id="opsArpuChart"></canvas></div>
+        <div id="opsArpuDetail" class="collapsible-content collapsed" style="margin-top:8px">
+          <div id="opsArpuStats"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="dashboard-row revenue-row">
+    <article class="panel bridge-panel">
       <div class="chart-section-head">
-        <div><h2 id="bridgeTitle">수익 브리지</h2><p class="sub">쿠폰 적용 전 추정액 → 할인 → 실결제매출 → 환불 → 순매출</p></div>
-        <button class="collapse-toggle" data-target="bridgeWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
+        <div><h2 id="bridgeTitle">포트폴리오 수익 브릿지</h2><p class="sub">실결제매출 → 환불 → 순매출</p></div>
+        <button class="collapse-toggle" data-target="bridgeWrap" aria-label="접기"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="bridgeWrap" class="collapsible-content">
         <div class="chart lg"><canvas id="bridgeChart"></canvas></div>
       </div>
     </article>
-    <article class="panel col-4">
+    <article class="panel">
       <h2>매장 벤치마크 랭킹</h2>
-      <p class="sub" id="rankStripSub">실결제매출 순위 + 순매출 달성률 비교 — 행 클릭으로 선택</p>
+      <p class="sub">실결제매출 순위 + 순매출 달성률 비교 — 행 클릭으로 선택 (운영 중 매장만 / 오픈예정 제외)</p>
+      <div id="rankStripSub" style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600"></div>
       <div id="rankStrip" class="rank-strip"></div>
     </article>
-    <article class="panel col-4">
+    <article class="panel">
       <h2>건강도 레이더</h2>
       <p class="sub" id="healthSub">선택 매장 vs 포트폴리오 평균</p>
       <div class="chart lg"><canvas id="healthChart"></canvas></div>
     </article>
-    <article class="panel col-2">
+  </div>
+  <div class="dashboard-row">
+    <article class="panel">
       <h2 id="mixTitle">수익 구성 분석</h2>
-      <p class="sub" id="mixSub">순매출·할인·환불·기타 비중</p>
+      <p class="sub" id="mixSub">실결제매출 내 순매출과 환불 비중</p>
       <div class="chart lg"><canvas id="mixChart"></canvas></div>
     </article>
-    <article class="panel col-2">
-      <h2>구독 파이프라인</h2>
-      <p class="sub">월말 유지 구독자와 월중 신규·해지 흐름</p>
+    <article class="panel">
+      <h2>구독 현황</h2>
+      <p class="sub">월말 유지 구독자와 월중 신규/해지 흐름</p>
       <div id="subPipeline" class="sub-pipeline"></div>
     </article>
-    <article class="panel col-4">
+  </div>
+  <div class="dashboard-row">
+    <article class="panel">
       <div class="chart-section-head">
-        <div><h2>분기 스냅샷</h2><p class="sub">Q1·Q2·Q3 MTD 누적 매출 및 순증감</p></div>
-        <button class="collapse-toggle" data-target="quarterWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
+        <div><h2>분기 스냅샷</h2><p class="sub">분기별 누적 매출 및 순증감</p></div>
+        <button class="collapse-toggle" data-target="quarterWrap" aria-label="접기"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="quarterWrap" class="collapsible-content">
         <div class="chart lg"><canvas id="quarterChart"></canvas></div>
       </div>
     </article>
-    <article class="panel col-4">
+    <article class="panel">
       <div class="chart-section-head">
-        <div><h2 id="positionTitle">포지션 맵</h2><p class="sub" id="positionSub">매출 집계 월 기준 · 순매출 달성률(X)·이탈률(Y)·실결제매출(버블)</p></div>
-        <button class="collapse-toggle" data-target="scatterWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
+        <div><h2 id="positionTitle">포지션 맵</h2><p class="sub" id="positionSub">매출 집계 월 기준 / 순매출 달성률(X)/이탈률(Y)/실결제매출(버블)</p></div>
+        <button class="collapse-toggle" data-target="scatterWrap" aria-label="접기"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="scatterWrap" class="collapsible-content">
         <div class="chart lg"><canvas id="scatterChart"></canvas></div>
       </div>
     </article>
-    <article class="panel col-4">
+    <article class="panel">
       <div class="chart-section-head">
-        <div><h2 id="momentumTitle">YoY 성장 모멘텀</h2><p class="sub">실결제매출·순매출·가동률 전년 동기 대비</p></div>
-        <button class="collapse-toggle" data-target="momentumWrap"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
+        <div><h2 id="momentumTitle">YoY 성장 모멘텀</h2><p class="sub">실결제매출/순매출/가동률 전년 동기 대비</p></div>
+        <button class="collapse-toggle" data-target="momentumWrap" aria-label="접기"><span class="arrow">▾</span><span class="toggle-label">접기</span></button>
       </div>
       <div id="momentumWrap" class="collapsible-content">
         <div class="chart lg"><canvas id="momentumChart"></canvas></div>
@@ -277,46 +310,53 @@
     <div class="section-header">
       <div>
         <h2><span class="section-icon amber">⚙</span>가동률 심층 분석</h2>
-        <p class="sub" style="margin-bottom:0">원천 Capacity·MTD Capacity 기준 운영 효율 분석</p>
+        <p class="sub" style="margin-bottom:0">매장별 원천 Capacity / 유휴 대수 / 기회금액 상한 / 계절 지수</p>
       </div>
       <span class="section-tag">OPS</span>
     </div>
     <div id="capacityPanel" class="capacity-panel"></div>
   </section>
 
-  <div class="chart-master-grid" style="margin-bottom:14px">
-    <article class="panel col-8">
+  <div class="dashboard-row">
+    <article class="panel">
       <h2>계절 지수 트렌드</h2>
-      <p class="sub">월별 세차 대수 (막대) + 계절 지수 (선) — 기준선 1.0 = 연평균 45,741대/월</p>
+      <p class="sub">월별 세차 대수 (막대) + 계절 지수 (선) — 기준선 1.0 = 연평균 41,909대/월</p>
       <div class="chart lg"><canvas id="seasonChart"></canvas></div>
     </article>
-    <article class="panel col-4">
-      <h2>결제 단가 · ARPU 요약</h2>
-      <p class="sub">건당 매출·순매출·구독 ARPU·목표 단가</p>
+    <article class="panel">
+      <h2>결제 단가와 매장PASS ARPU 요약</h2>
+      <p class="sub">건당 매출과 순매출 / 구독-월 노출 기준 ARPU</p>
       <div id="paymentPanel" class="payment-panel"></div>
     </article>
   </div>
 
   <section class="panel heatmap-section">
     <h2>매장 성과 히트맵</h2>
-      <p class="sub">선택 기간 운영 매장 × 8개 핵심 지표. 초록=우수, 빨강=주의. 행 클릭으로 매장 선택.</p>
-    <button id="hmToggleExtra" class="heatmap-toggle" type="button">▼ 추가 지표</button>
+    <p class="sub">선택 기간 운영 매장의 비교 가능한 핵심 지표. 초록=우수, 빨강=주의. 행 클릭으로 매장 선택. 해당 기간 미운영 매장은 KPI 집계에서 제외.</p>
     <div id="heatmapGrid"></div>
   </section>
 
   <section id="inlineStoreDetail" class="panel" style="display:none;margin-bottom:14px"></section>
 
-  <section class="grid equal-grid">
+  <section class="snapshot-stack">
     <article class="panel">
       <h2>매장 스냅샷</h2>
-      <p class="sub">행 클릭 시 전체 차트 재계산</p>
-      <div class="table-wrap">
-        <table>
+      <p class="sub">선택 기간 핵심 운영지표 / 행을 선택하면 매장 상세로 이동</p>
+      <div class="table-wrap store-snapshot-wrap">
+        <table class="store-snapshot-table">
+          <caption class="sr-only">매장별 순매출 달성률, 가동률, 이탈률, 순증감 및 상태</caption>
+          <colgroup>
+            <col class="snapshot-col-store"><col class="snapshot-col-achievement">
+            <col class="snapshot-col-rate"><col class="snapshot-col-rate">
+            <col class="snapshot-col-adds"><col class="snapshot-col-status">
+          </colgroup>
           <thead><tr>
-            <th style="text-align:left">매장</th>
-            <th>실결제매출</th><th>순매출 달성률</th><th>순매출</th>
-            <th>총사용</th><th>가동률</th><th>환불율</th>
-            <th>순증감</th><th>ARPU (원)</th><th>상태</th>
+            <th scope="col" style="text-align:left">매장</th>
+            <th scope="col">순매출 달성률</th>
+            <th scope="col" title="총사용 ÷ 원천 MTD Capacity">가동률</th>
+            <th scope="col">이탈률</th>
+            <th scope="col">순증감</th>
+            <th scope="col">상태</th>
           </tr></thead>
           <tbody id="storeTableBody"></tbody>
         </table>
@@ -330,5 +370,6 @@
   </section>
 </div>
 <script src="./data.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
