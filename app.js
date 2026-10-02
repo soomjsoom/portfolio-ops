@@ -3073,6 +3073,9 @@ function renderHeroKpis(ent) {
     { label:'순증감', val: hasSubscriptionData ? `${(c.netAdds||0)>=0?'+':''}${fmtN(c.netAdds||0)}` : '—', note: hasSubscriptionData ? `신규 ${fmtN(c.newSubs||0)} / 해지 ${fmtN(c.cancelSubs||0)} / ${subscriptionBasisLabel(c)}` : subscriptionBasisLabel(c), good: hasSubscriptionData ? (c.netAdds||0)>=0 : null },
     { label:'순매출 달성률', val: fmtP(c.achievement||0), note: `순매출 ${fmtS(c.net||0)} / 목표 ${fmtS(c.target||0)}`, good: (c.achievement||0)>=100 }
   ];
+  if (!ent.months.length) {
+    items.forEach(item => Object.assign(item, { val:'—', note:'선택 기간 운영 이력 없음', good:null }));
+  }
   el.innerHTML = items.map(it => {
     const color = it.good == null ? '#f4ce91' : it.good ? '#9ae6c6' : it.invert ? '#ffacb7' : '#f4ce91';
     return `<div class="hero-kpi">
@@ -4885,11 +4888,46 @@ function renderSourceCoverage(ent) {
     '<span class="source-link">가상 원장 점검 / 실제 업무 시스템 연결 없음</span>';
 }
 
+// Preserve panel visibility while a selected store has no operating months.
+const emptyPeriodPanels = new Map();
+function setEmptyPeriodPanels(empty) {
+  if (empty) {
+    document.querySelectorAll('.wrap > section:not(.toolbar):not(#alertStrip), .wrap > .dashboard-row, .wrap > details').forEach(panel => {
+      if (!emptyPeriodPanels.has(panel)) emptyPeriodPanels.set(panel, panel.hidden);
+      panel.hidden = true;
+    });
+  } else {
+    emptyPeriodPanels.forEach((hidden, panel) => { panel.hidden = hidden; });
+    emptyPeriodPanels.clear();
+  }
+}
+
+function renderEmptyPeriod(ent) {
+  const openDate = STORE_OPEN_DATES[ent.name];
+  $('focusLabel').textContent = ent.name;
+  $('focusSub').textContent = '선택 기간 운영 이력 없음';
+  $('focusScore').style.display = 'none';
+  $('scoreBadgeVal').textContent = '—';
+  $('scoreBadgeRank').textContent = '';
+  $('statusDot').style.backgroundColor = '#6b7280';
+  $('statusText').textContent = '운영 이력 없음';
+  const alert = $('alertStrip');
+  alert.style.display = 'flex';
+  alert.innerHTML = `<div class="alert-item alert-info">${ent.name}은 선택 기간에 운영 이력이 없습니다.${openDate ? ` 오픈일: ${openDate}.` : ''} 운영 기간을 선택하면 지표와 그래프가 표시됩니다. 미운영 기간은 성과, 순위, 위험 판단에서 제외합니다.</div>`;
+}
+
 function renderAll() {
   renderSourceNotice();
   if (!dashboard) return;
   const ent = getEntity();
   if (!ent) return;
+  const emptyPeriod = ent.months.length === 0;
+  setEmptyPeriodPanels(emptyPeriod);
+  if (emptyPeriod) {
+    renderHeroKpis(ent);
+    renderEmptyPeriod(ent);
+    return;
+  }
   const usageComplete = ent.current.hasUsageData !== false && ent.current.hasSalesData !== false;
   const portfolioComplete = getActiveStores().every(s => filterMonths(s.months).every(m=>m.hasUsageData!==false && m.hasSalesData!==false));
   renderSourceCoverage(ent);
