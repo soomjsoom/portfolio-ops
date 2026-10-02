@@ -4882,7 +4882,7 @@ function renderSourceCoverage(ent) {
     <p class="sub">자료가 부족한 종합 점수, 순위, 기회금액 및 비교 분석은 표시하지 않습니다. 확인 가능한 매출과 구독 지표는 유지합니다.</p>` : '';
   $('auditList').innerHTML = warnings.map(c=>`<div class="quality-item"><strong>${esc(c.name)}</strong><span>${esc(c.value || c.status)}</span></div>`).join('') +
     (pending ? '<p>원천 최종 점검이 완료되지 않았습니다.</p>' : '') +
-    '<a class="source-link" href="#demo-source" target="_blank" rel="noopener noreferrer">원천 데이터 점검 열기</a>';
+    '<span class="source-link">가상 원장 점검 / 실제 업무 시스템 연결 없음</span>';
 }
 
 function renderAll() {
